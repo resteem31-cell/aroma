@@ -804,7 +804,7 @@ const STONES = {
   water: [["라피스 라줄리", "깊은 통찰과 지혜를 여는 돌", "#24427F"], ["아쿠아마린", "막힌 소통을 부드럽게 흐르게 하는 돌", "#7FB8C9"], ["블랙 오닉스", "나를 지키는 경계와 보호의 돌", "#22252A"]],
 };
 /* 오행별 대표 오일(덱 안의 오일 id, 우선순위 순) */
-/* 도테라코리아 판매 제품 (2026년 10월 확인). 카드 오일 id → 제품.
+/* 추천 판매 제품 (2026년 10월 확인). 카드 오일 id → 제품.
    sub: 같은 제품이 없어 비슷한 향으로 대신한 경우, touch: 미리 희석된 롤온 제품(디퓨저 X) */
 const DT = {
   lavender: { n: "라벤더", ml: 15 }, rose: { n: "로즈 터치", ml: 10, touch: 1 }, peppermint: { n: "페퍼민트", ml: 15 },
@@ -822,7 +822,7 @@ const DT = {
   lime: { n: "라임", ml: 15 }, mandarin: { n: "그린만다린", ml: 15 }, cardamom: { n: "진저", ml: 15, sub: 1 },
   thyme: { n: "타임", ml: 15 }, spikenard: { n: "베티버", ml: 15, sub: 1 }, benzoin: { n: "시더우드", ml: 15, sub: 1 },
 };
-/* 오행별 도테라 블렌드 */
+/* 오행별 추천 블렌드 */
 const EL_DT_BLEND = {
   wood: ["모티베이트", "의욕과 자신감을 북돋는 블렌드"],
   fire: ["치어", "가라앉은 기분을 밝게 띄우는 블렌드"],
@@ -1229,9 +1229,9 @@ if (typeof document !== "undefined") {
           <p>${EL[pe].lack} ${info.secondary.length ? `함께 ${info.secondary.map(e => `${EL[e].ko}(${EL[e].hz})`).join("·")} 기운도 조금씩 보태면 좋습니다.` : ""}</p>
           <div class="stones">${STONES[pe].map(([n, d, c]) => `<div class="stone"><div class="gem-art">${ART.stone(n)}</div><div><b>${n}</b><span>${d}</span></div></div>`).join("")}</div>
           <div class="life">
-            <div><b>추천 아로마 · 도테라</b></div>
+            <div><b>추천 아로마</b></div>
             <div class="oil-tiles">${EL_OILS[pe].slice(0, 3).map(id => OIL[id]).map(o => `<div class="tile" style="--tel:var(--${o.el})"><div class="tile-art">${ART.plant(o.id)}</div><b>${DT[o.id].n}</b><span>${DT[o.id].ml}mL · ${o.heal}</span></div>`).join("")}</div>
-            <div><b>함께 쓰면 좋은 도테라 블렌드</b> ${EL_DT_BLEND[pe][0]} · ${EL_DT_BLEND[pe][1]}</div>
+            <div><b>함께 쓰면 좋은 블렌드</b> ${EL_DT_BLEND[pe][0]} · ${EL_DT_BLEND[pe][1]}</div>
             <div><b>생활 컬러</b> ${EL[pe].color}</div>
             <div><b>생활 습관</b> ${EL[pe].life}</div>
             ${info.excess.length ? `<div><b>넘치는 기운 다스리기</b> ${info.excess.map(e => EL[e].ko).join("·")} 기운은 ${EL[GEN[info.excess.includes(info.dm) ? info.dm : info.excess[0]]].ko} 기운의 활동(${EL[GEN[info.excess.includes(info.dm) ? info.dm : info.excess[0]]].life})으로 흘려보내세요.</div>` : ""}
@@ -1253,11 +1253,11 @@ if (typeof document !== "undefined") {
     cautions.push("처음 쓰는 오일은 팔 안쪽에 조금 발라 24시간 반응을 확인하세요.");
     const blendName = `${cards[4].heal} 블렌드`;
     $("#blend").innerHTML = `<h3>추천 아로마 블렌딩 · ${blendName}</h3>
-      <p class="pnote">해결 방법과 조언 카드의 향에 ${birth ? "사주에서 채워야 할 오행의 향" : "숨겨진 마음 카드의 향"}을 더해, 도테라코리아에서 판매하는 제품으로 골랐습니다. 디퓨저는 물 100ml 기준, 롤온은 캐리어 오일(도테라 프랙셔네이티드 코코넛 오일 등) 10ml 기준 약 2% 농도입니다.</p>
+      <p class="pnote">해결 방법과 조언 카드의 향에 ${birth ? "사주에서 채워야 할 오행의 향" : "숨겨진 마음 카드의 향"}을 더해, 바로 구할 수 있는 제품으로 골랐습니다. 디퓨저는 물 100ml 기준, 롤온은 캐리어 오일(프랙셔네이티드 코코넛 오일 등) 10ml 기준 약 2% 농도입니다.</p>
       <div class="recipe">${blend.map(b => `<div class="ing" style="--el:var(--${b.oil.el})"><span class="ing-art">${ART.plant(b.oil.id)}</span>
-        <span class="nm">도테라 ${b.dt.n} <small style="font-family:var(--body);font-weight:400;color:var(--muted);font-size:12px">${b.dt.ml}mL</small><span class="why">${b.why}${b.card.id !== b.oil.id || b.dt.sub ? ` · ${b.card.ko} 대신` : ""} · ${b.oil.heal}</span></span>
+        <span class="nm">${b.dt.n} <small style="font-family:var(--body);font-weight:400;color:var(--muted);font-size:12px">${b.dt.ml}mL</small><span class="why">${b.why}${b.card.id !== b.oil.id || b.dt.sub ? ` · ${b.card.ko} 대신` : ""} · ${b.oil.heal}</span></span>
         <span class="dr">${b.dt.touch ? "바로 바르기<small>희석된 롤온</small>" : `디퓨저 ${b.diffuser}방울<small>롤온 ${b.roll}방울</small>`}</span></div>`).join("")}</div>
-      ${birth ? `<p class="pnote">함께 쓰면 좋은 도테라 블렌드: <b>${EL_DT_BLEND[birth.info.primary][0]}</b> (${EL_DT_BLEND[birth.info.primary][1]})</p>` : ""}
+      ${birth ? `<p class="pnote">함께 쓰면 좋은 블렌드: <b>${EL_DT_BLEND[birth.info.primary][0]}</b> (${EL_DT_BLEND[birth.info.primary][1]})</p>` : ""}
       <div class="caution">${cautions.map(c => `<div>${c}</div>`).join("")}</div>`;
 
     $("#closing-msg").textContent = `“${cards[6].msg}”`;
@@ -1279,12 +1279,12 @@ if (typeof document !== "undefined") {
       L.push("■ 오행 솔루션", `원국: 시 ${f(s.hour)} / 일 ${f(s.day)} / 월 ${f(s.month)} / 연 ${f(s.year)}`,
         `오행: ${EL_ORDER.map(e => EL[e].ko + birth.info.counts[e]).join(" ")}`,
         `채워 줄 기운: ${EL[pe].ko}(${EL[pe].hz}) · 원석 ${STONES[pe].map(x => x[0]).join(", ")}`,
-        `추천 도테라 오일: ${EL_OILS[pe].slice(0, 3).map(id => DT[id].n).join(", ")} / 블렌드 ${EL_DT_BLEND[pe][0]}`,
+        `추천 오일: ${EL_OILS[pe].slice(0, 3).map(id => DT[id].n).join(", ")} / 블렌드 ${EL_DT_BLEND[pe][0]}`,
         `생활 컬러: ${EL[pe].color}`, "");
     }
     L.push(`■ ${blendName}`);
-    blend.forEach(b => L.push(b.dt.touch ? `- 도테라 ${b.dt.n} ${b.dt.ml}mL: 희석된 롤온, 바로 바르기 (${b.why})` : `- 도테라 ${b.dt.n} ${b.dt.ml}mL: 디퓨저 ${b.diffuser}방울 / 롤온 10ml ${b.roll}방울 (${b.why})`));
-    if (birth) L.push(`- 함께 쓰면 좋은 블렌드: 도테라 ${EL_DT_BLEND[birth.info.primary][0]}`);
+    blend.forEach(b => L.push(b.dt.touch ? `- ${b.dt.n} ${b.dt.ml}mL: 희석된 롤온, 바로 바르기 (${b.why})` : `- ${b.dt.n} ${b.dt.ml}mL: 디퓨저 ${b.diffuser}방울 / 롤온 10ml ${b.roll}방울 (${b.why})`));
+    if (birth) L.push(`- 함께 쓰면 좋은 블렌드: ${EL_DT_BLEND[birth.info.primary][0]}`);
     L.push("", `“${cards[6].msg}”`);
     return L.join("\n");
   }
@@ -1309,7 +1309,7 @@ if (typeof document !== "undefined") {
     if (!lastReading) return;
     const { blend, blendName, birth } = lastReading;
     const pe = birth && birth.info.primary;
-    box.innerHTML = `<b>함께 전달되는 내용</b><span>${blendName}: ${blend.map(b => "도테라 " + b.dt.n).join(" · ")}</span>` +
+    box.innerHTML = `<b>함께 전달되는 내용</b><span>${blendName}: ${blend.map(b => b.dt.n).join(" · ")}</span>` +
       (pe ? `<span>채울 기운 ${EL[pe].ko}(${EL[pe].hz}) · 원석 ${STONES[pe].map(x => x[0]).join(", ")}</span>` : "") +
       `<span>일곱 장 카드 리딩 전문</span>`;
   }
