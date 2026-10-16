@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="description" content="아로마 감정카드 7장으로 마음을 읽고, 생년월일시 오행에 맞춘 원석과 아로마 블렌딩을 추천받으세요.">
-<meta property="og:title" content="일곱 향기 리딩">
+<meta property="og:title" content="Notice &amp; Move Forward">
 <meta property="og:description" content="당신의 과거, 현재, 미래 감정의 흐름을 들여다보세요.">
 <meta property="og:image" content="hero.jpg">
 <style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
-<title>일곱 향기 리딩</title>
+<title>Notice &amp; Move Forward</title>
 </head>
 <body>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -265,7 +265,7 @@ footer { font-size: 12px; color: var(--muted); text-align: center; line-height: 
   <header class="hero">
     <figure class="hero-img"><img src="hero.jpg" alt="꽃과 라벤더에 둘러싸인 여인과 호숫가 마을. 당신의 과거, 현재, 미래 감정의 흐름을 들여다보세요" width="1536" height="1024" fetchpriority="high"></figure>
     <div class="eyebrow">AROMA EMOTION CARD · 五行</div>
-    <h1>일곱 향기 리딩</h1>
+    <h1>Notice &amp; Move Forward</h1>
     <p>지금 마음에 걸리는 일을 떠올리며 42장의 향기 카드 가운데 7장을 고르세요. 과거에서 앞으로의 흐름까지 일곱 자리에 놓인 향이 마음을 읽어 주고, 생년월일시로 본 오행에 맞춰 원석과 아로마 블렌딩을 처방해 드립니다.</p>
     <div class="cta">
       <a class="btn primary" href="#sec-birth">아로마 테스트 해보기</a>
@@ -1270,7 +1270,7 @@ if (typeof document !== "undefined") {
     if (!lastReading) return "";
     const { cards, birth, blend, blendName, summary, elLine, name } = lastReading;
     const L = [];
-    L.push(`[일곱 향기 리딩]${name ? " " + name + " 님" : ""}`, "");
+    L.push(`[Notice & Move Forward]${name ? " " + name + " 님" : ""}`, "");
     cards.forEach((o, i) => { L.push(`${i + 1}. ${POSITIONS[i].name} · ${o.ko} (${o.kw} → ${o.heal})`, POSITIONS[i].text(o), `실천: ${o.act}`, ""); });
     L.push("■ 요약", summary, elLine, "");
     if (birth) {
@@ -1325,13 +1325,13 @@ if (typeof document !== "undefined") {
     if ($("#buy-honey").value) return;
     const product = $("#buy-product").value, msg = $("#buy-msg").value.trim();
     const reading = lastReading ? readingText() : "(카드 리딩 없이 신청)";
-    const plain = `[일곱 향기 구매 신청]\n이름: ${name}\n연락처: ${phone}\n상품: ${product}\n남긴 말: ${msg || "-"}\n\n${reading}`;
+    const plain = `[Notice & Move Forward 구매 신청]\n이름: ${name}\n연락처: ${phone}\n상품: ${product}\n남긴 말: ${msg || "-"}\n\n${reading}`;
     btn.disabled = true; st.textContent = "보내는 중입니다...";
     try {
       const res = await fetch(FORM_ENDPOINT, {
         method: "POST",
         headers: { "Content-Type": "application/json", Accept: "application/json" },
-        body: JSON.stringify({ _subject: `[일곱 향기] 구매 신청 · ${name}`, _template: "box", 이름: name, 연락처: phone, 상품: product, 남긴말: msg || "-", 리딩결과: reading }),
+        body: JSON.stringify({ _subject: `[Notice & Move Forward] 구매 신청 · ${name}`, _template: "box", 이름: name, 연락처: phone, 상품: product, 남긴말: msg || "-", 리딩결과: reading }),
       });
       const data = await res.json().catch(() => ({}));
       if (!res.ok || String(data.success) === "false") throw new Error(data.message || res.status);
