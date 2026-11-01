@@ -1,0 +1,842 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="연애운, 재회운, 진로운, 선택의 기로. 다섯 장 중 한 장을 고르면 이어지는 11장의 타로 카드로 깊이 있는 풀이와 조언을 드립니다.">
+<meta property="og:title" content="Light the Way · 11장 타로">
+<meta property="og:description" content="다섯 장 중 한 장을 고르면, 이어지는 열한 장이 당신의 길을 비춥니다.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Light the Way">
+<meta property="og:url" content="https://resteem31-cell.github.io/aroma/tarot/">
+<meta property="og:image" content="https://resteem31-cell.github.io/aroma/tarot/cards/m17.webp">
+<meta name="twitter:card" content="summary">
+<title>Light the Way</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600;700&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap">
+<style>
+/* Layout: 한 줄 세로 흐름. 주제 고르기 → 덱 펼치기 → 다섯 장 중 한 장 → 11장 배열 → 풀이 */
+:root {
+  --bg: #EEEDF1;
+  --surface: #F9F8FB;
+  --ink: #1D1B26;
+  --muted: #5D5A6A;
+  --line: #D9D6E1;
+  --accent: #8E5A17;
+  --accent-soft: #F1E5D2;
+  --back: #1E2142;
+  --back-2: #31366A;
+  --gold: #C7A256;
+  --good: #3E7B50;
+  --bad: #B4473A;
+  --display: "Hahmlet", "Nanum Myeongjo", "AppleMyungjo", serif;
+  --body: "IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", system-ui, sans-serif;
+  --radius: 10px;
+  --card-ratio: 300 / 527;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121119; --surface: #1B1A24; --ink: #E8E6EF; --muted: #A19EAF; --line: #2F2D3B;
+    --accent: #E2A752; --accent-soft: #3A2E1D; --back: #1A1D3A; --back-2: #2A2F5E; --gold: #D2B06A;
+    --good: #6FB282; --bad: #E7796A;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121119; --surface: #1B1A24; --ink: #E8E6EF; --muted: #A19EAF; --line: #2F2D3B;
+  --accent: #E2A752; --accent-soft: #3A2E1D; --back: #1A1D3A; --back-2: #2A2F5E; --gold: #D2B06A;
+  --good: #6FB282; --bad: #E7796A;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 16px; line-height: 1.75;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0 48px;
+  word-break: keep-all; overflow-wrap: break-word;
+}
+[hidden] { display: none !important; }
+img { max-width: 100%; }
+.wrap { max-width: 980px; margin: 0 auto; display: grid; gap: 56px; }
+h1, h2, h3, h4 { font-family: var(--display); text-wrap: balance; margin: 0; line-height: 1.3; }
+p { margin: 0; }
+button { font: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+/* ---------- header ---------- */
+header.hero { padding-top: 28px; display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 18px 28px; align-items: center; }
+.hero-text { display: grid; gap: 14px; }
+.eyebrow { font-size: 13px; letter-spacing: .12em; color: var(--accent); font-weight: 600; }
+.hero h1 { font-size: clamp(34px, 7vw, 56px); font-weight: 700; letter-spacing: -.01em; }
+.hero h1 small { display: block; font-size: .42em; font-weight: 600; color: var(--muted); margin-top: 6px; letter-spacing: 0; }
+.hero p { color: var(--muted); max-width: 36em; }
+.hero-fan { position: relative; width: 250px; height: 230px; }
+.hero-fan img { position: absolute; bottom: 0; left: 50%; width: 112px; margin-left: -56px; border-radius: 9px; transform-origin: 50% 110%; box-shadow: 0 6px 18px rgba(0,0,0,.18); }
+.hero-fan img:nth-child(1) { transform: rotate(-16deg) translateX(-20px); }
+.hero-fan img:nth-child(2) { transform: translateY(-14px); z-index: 1; }
+.hero-fan img:nth-child(3) { transform: rotate(16deg) translateX(20px); }
+@media (max-width: 640px) {
+  header.hero { grid-template-columns: 1fr; }
+  .hero-fan { order: -1; justify-self: center; width: 220px; height: 190px; }
+  .hero-fan img { width: 96px; margin-left: -48px; }
+}
+.steps { display: flex; flex-wrap: wrap; gap: 8px 20px; padding: 0; margin: 4px 0 0; list-style: none; font-size: 14px; color: var(--muted); }
+.steps li { display: flex; gap: 8px; align-items: center; }
+.steps b { font-family: var(--display); color: var(--ink); font-size: 15px; }
+
+/* ---------- sections ---------- */
+section { display: grid; gap: 20px; scroll-margin-top: 16px; }
+.sec-head { display: grid; gap: 6px; }
+.sec-head h2 { font-size: clamp(22px, 4vw, 28px); }
+.sec-head p { color: var(--muted); font-size: 15px; }
+.sec-num { font-family: var(--display); color: var(--accent); font-size: 15px; }
+
+/* ---------- topics ---------- */
+.topics { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 720px) { .topics { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.topic { display: grid; grid-template-columns: 54px minmax(0, 1fr); gap: 12px; align-items: center; text-align: left; padding: 14px; border-radius: var(--radius); border: 1.5px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; transition: border-color .2s, transform .2s; }
+.topic:hover { border-color: var(--accent); transform: translateY(-2px); }
+.topic[aria-pressed="true"] { border-color: var(--accent); background: var(--accent-soft); }
+.topic img { width: 54px; border-radius: 5px; display: block; }
+.topic b { display: block; font-family: var(--display); font-size: 18px; line-height: 1.3; }
+.topic span { display: block; font-size: 13px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+.ask { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.ask .full { grid-column: 1 / -1; }
+.field { display: grid; gap: 6px; min-width: 0; }
+.field label { font-size: 13px; font-weight: 600; color: var(--muted); letter-spacing: .02em; }
+.field input, .field textarea { width: 100%; min-height: 46px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); color: var(--ink); font: inherit; font-size: 16px; }
+.field textarea { min-height: 76px; resize: vertical; }
+.form-note { font-size: 13px; color: var(--muted); }
+.btns { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.btn { min-height: 46px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-weight: 500; font-size: 15px; display: inline-flex; align-items: center; text-decoration: none; }
+.btn:hover { border-color: var(--accent); }
+.btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); font-weight: 600; }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
+.warn { font-size: 14px; color: var(--bad); min-height: 1.4em; }
+
+/* ---------- card back ---------- */
+.back {
+  width: 100%; height: 100%; border-radius: inherit; display: grid; place-items: center;
+  background:
+    radial-gradient(circle at 50% 50%, transparent 0 18%, var(--gold) 18.5% 19.5%, transparent 20% 27%, color-mix(in srgb, var(--gold) 55%, transparent) 27.5% 28%, transparent 28.5%),
+    repeating-linear-gradient(45deg, transparent 0 6px, color-mix(in srgb, var(--gold) 13%, transparent) 6px 7px),
+    linear-gradient(160deg, var(--back-2), var(--back));
+  box-shadow: inset 0 0 0 2px var(--back), inset 0 0 0 3px color-mix(in srgb, var(--gold) 70%, transparent);
+  color: var(--gold); font-family: var(--display);
+}
+.back span { font-size: clamp(10px, 2.6vw, 18px); }
+.art { display: block; width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+.art.rev { transform: rotate(180deg); }
+
+/* ---------- deck fan ---------- */
+.table { background: radial-gradient(ellipse at 50% 120%, color-mix(in srgb, var(--back-2) 30%, var(--surface)), var(--surface) 70%); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 14px 24px; display: grid; gap: 18px; overflow: hidden; }
+.fan { position: relative; height: clamp(120px, 20vw, 170px); margin-top: 8px; }
+.fb { position: absolute; left: 50%; bottom: 22%; width: clamp(34px, 6vw, 56px); aspect-ratio: var(--card-ratio); margin-left: calc(clamp(34px, 6vw, 56px) / -2); border-radius: 5px; transform-origin: 50% 165%; transition: transform .9s cubic-bezier(.3,.7,.3,1); box-shadow: 0 1px 3px rgba(0,0,0,.3); }
+.fb .back span { display: none; }
+.table-cap { text-align: center; font-size: 14px; color: var(--muted); }
+.table-cap b { color: var(--ink); font-family: var(--display); font-size: 17px; display: block; }
+.five { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(8px, 2vw, 18px); max-width: 640px; width: 100%; margin: 0 auto; }
+.pick { aspect-ratio: var(--card-ratio); border: none; padding: 0; background: none; cursor: pointer; border-radius: 8px; perspective: 900px; transition: transform .25s, opacity .4s; opacity: 0; transform: translateY(18px); }
+.pick.in { opacity: 1; transform: none; }
+.pick.in:hover:not(:disabled) { transform: translateY(-8px); }
+.pick:disabled { cursor: default; }
+.pick.dim { opacity: .2; }
+.pick.chosen { transform: translateY(-8px); }
+
+/* flip (공용) */
+.flip .inner { position: relative; width: 100%; height: 100%; transition: transform .8s cubic-bezier(.3,.7,.3,1); transform-style: preserve-3d; border-radius: 8px; }
+.flip.open .inner { transform: rotateY(180deg); }
+.flip .back, .flip .front { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 8px; }
+.flip .front { transform: rotateY(180deg); overflow: hidden; background: var(--surface); }
+
+/* ---------- 11 spread ---------- */
+.spread-wrap { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px 16px; display: grid; gap: 18px; }
+.spread-title { font-family: var(--display); font-size: 19px; text-align: center; }
+.spread-title small { display: block; font-family: var(--body); font-size: 13px; color: var(--muted); font-weight: 400; }
+.spread { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 16px 10px; }
+@media (max-width: 640px) { .spread { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px 8px; } }
+.slot { display: grid; gap: 6px; justify-items: center; text-align: center; min-width: 0; }
+.slot .flip { width: 100%; aspect-ratio: var(--card-ratio); border-radius: 8px; }
+.slot .sl-lab { font-size: 12px; line-height: 1.35; color: var(--muted); }
+.slot .sl-lab b { display: block; font-family: var(--display); color: var(--accent); font-size: 14px; }
+.slot.key .flip { box-shadow: 0 0 0 2px var(--gold); }
+.slot .nm { font-size: 12px; line-height: 1.3; font-weight: 600; min-height: 2.6em; }
+
+/* ---------- reading ---------- */
+.reading-head { display: grid; gap: 14px; }
+.summary { display: grid; gap: 12px; padding: 22px; border-radius: var(--radius); background: var(--accent-soft); }
+.summary h3 { font-size: 20px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-size: 13px; padding: 2px 10px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); white-space: nowrap; }
+.chip.rev { color: var(--bad); border-color: color-mix(in srgb, var(--bad) 40%, transparent); }
+.gauge { display: grid; gap: 6px; }
+.gauge .row { display: grid; grid-template-columns: 74px minmax(0, 1fr) 44px; gap: 10px; align-items: center; font-size: 14px; }
+.gauge .row b { font-family: var(--display); }
+.gauge .track { height: 12px; border-radius: 6px; background: color-mix(in srgb, var(--line) 70%, transparent); overflow: hidden; }
+.gauge .fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, var(--gold), var(--accent)); }
+.gauge .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--muted); }
+.tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+.tab { min-height: 42px; padding: 0 18px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; font-weight: 600; }
+.tab[aria-selected="true"] { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.part { display: grid; gap: 0; }
+.part-h { display: flex; gap: 10px; align-items: baseline; padding: 30px 0 6px; border-bottom: 2px solid var(--ink); }
+.part-h h3 { font-size: clamp(21px, 3.6vw, 26px); }
+.part-h span { font-family: var(--display); color: var(--accent); font-size: 15px; }
+.reading { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 20px; padding: 22px 0; border-bottom: 1px solid var(--line); }
+.reading .mini { width: 104px; aspect-ratio: var(--card-ratio); border-radius: 7px; overflow: hidden; }
+.reading .body { display: grid; gap: 10px; min-width: 0; }
+.reading .pos { font-size: 13px; color: var(--accent); font-weight: 600; letter-spacing: .04em; }
+.reading h4 { font-size: 21px; }
+.reading h4 small { font-family: var(--body); font-size: 13px; color: var(--muted); font-weight: 400; margin-left: 6px; font-style: italic; }
+.reading .note { font-size: 15px; color: var(--muted); }
+.wrapup { padding: 18px 20px; margin: 18px 0 4px; background: var(--surface); border: 1px solid var(--line); border-left: 3px solid var(--gold); border-radius: 8px; display: grid; gap: 8px; }
+.wrapup b { font-family: var(--display); }
+@media (max-width: 520px) { .reading { grid-template-columns: 70px minmax(0, 1fr); gap: 14px; } .reading .mini { width: 70px; } }
+.motto { text-align: center; display: grid; gap: 12px; justify-items: center; padding: 26px 18px; margin-top: 18px; border-radius: var(--radius); background: linear-gradient(160deg, var(--back-2), var(--back)); color: #F3EBDA; }
+.motto .lab { font-size: 13px; letter-spacing: .14em; color: var(--gold); font-weight: 600; }
+.motto blockquote { margin: 0; font-family: var(--display); font-size: clamp(21px, 4vw, 28px); line-height: 1.5; max-width: 22em; }
+.motto ul { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; font-size: 14px; color: #D9CFBD; max-width: 34em; }
+.compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+@media (max-width: 560px) { .compare { grid-template-columns: 1fr; } }
+.cmp { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; display: grid; gap: 8px; align-content: start; }
+.cmp h4 { font-size: 18px; }
+.cmp p { font-size: 15px; }
+.meta { font-size: 13px; color: var(--muted); text-align: right; }
+.closing { text-align: center; display: grid; gap: 14px; justify-items: center; padding: 8px 0; }
+.closing p { font-family: var(--display); font-size: 19px; max-width: 30em; }
+.toast { font-size: 14px; color: var(--accent); min-height: 1.4em; }
+footer { font-size: 12px; color: var(--muted); text-align: center; line-height: 1.7; }
+footer a { color: inherit; }
+@media (prefers-reduced-motion: reduce) {
+  .flip .inner, .fb, .pick, .topic { transition: none; }
+  html { scroll-behavior: auto; }
+}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <header class="hero">
+    <div class="hero-text">
+      <div class="eyebrow">TAROT · 11 CARD READING</div>
+      <h1>Light the Way<small>길을 비추는 열한 장의 타로</small></h1>
+      <p>마음에 걸린 질문을 하나 고르고, 펼쳐진 다섯 장 가운데 마음이 가는 한 장을 뽑으세요. 그 카드에 이어진 열한 장이 지금의 상황과 속마음, 앞으로의 흐름을 차례로 풀어 주고, 오늘 바로 해 볼 수 있는 조언을 건네 드립니다.</p>
+      <ol class="steps">
+        <li><b>1</b> 주제 고르기</li>
+        <li><b>2</b> 다섯 장 중 한 장</li>
+        <li><b>3</b> 열한 장 풀이 받기</li>
+      </ol>
+    </div>
+    <div class="hero-fan" aria-hidden="true">
+      <img src="cards/m18.webp" alt=""><img src="cards/m17.webp" alt=""><img src="cards/m19.webp" alt="">
+    </div>
+  </header>
+
+  <section id="sec-topic" aria-labelledby="h-topic">
+    <div class="sec-head">
+      <div class="sec-num">01</div>
+      <h2 id="h-topic">무엇이 궁금한가요?</h2>
+      <p>지금 가장 마음이 쓰이는 주제 하나를 고르세요. 주제에 따라 열한 장이 놓이는 자리와 풀이 방식이 달라집니다.</p>
+    </div>
+    <div class="topics" id="topics"></div>
+    <div class="ask" id="ask" hidden>
+      <div class="field full" id="f-q">
+        <label for="q">질문 (선택)</label>
+        <textarea id="q" maxlength="200" placeholder="예) 그 사람과 다시 가까워질 수 있을까요?"></textarea>
+      </div>
+      <div class="field" id="f-a" hidden>
+        <label for="optA">A 선택지</label>
+        <input id="optA" type="text" maxlength="40" placeholder="예) 지금 회사에 남는다">
+      </div>
+      <div class="field" id="f-b" hidden>
+        <label for="optB">B 선택지</label>
+        <input id="optB" type="text" maxlength="40" placeholder="예) 이직한다">
+      </div>
+      <p class="form-note full" id="ask-note">질문을 적지 않아도 괜찮아요. 카드를 뽑는 동안 마음속으로 질문을 한 번 떠올려 주세요.</p>
+      <div class="btns full">
+        <button class="btn primary" id="go" type="button">카드 섞고 펼치기</button>
+        <span class="warn" id="warn" role="status"></span>
+      </div>
+    </div>
+  </section>
+
+  <section id="sec-draw" aria-labelledby="h-draw" hidden>
+    <div class="sec-head">
+      <div class="sec-num">02</div>
+      <h2 id="h-draw">다섯 장 중 한 장을 고르세요</h2>
+      <p id="draw-sub">78장의 카드를 섞어 펼쳤어요. 그중 다섯 장을 앞으로 꺼내 두었습니다. 질문을 떠올리며 마음이 가는 한 장을 누르면, 그 카드에 이어진 열한 장이 자동으로 놓입니다.</p>
+    </div>
+    <div class="table">
+      <div class="fan" id="fan" aria-hidden="true"></div>
+      <div class="table-cap" id="table-cap"></div>
+      <div class="five" id="five"></div>
+      <div class="btns" style="justify-content:center"><button class="btn" id="reshuffle" type="button">다시 섞기</button></div>
+    </div>
+  </section>
+
+  <section id="sec-spread" aria-labelledby="h-spread" hidden>
+    <div class="sec-head">
+      <div class="sec-num">03</div>
+      <h2 id="h-spread">열한 장의 배열</h2>
+      <p>고른 카드가 첫 자리에 놓이고, 그 뒤로 이어진 열 장이 각자의 자리에 펼쳐졌어요. 금색 테두리가 당신이 직접 고른 열쇠 카드입니다.</p>
+    </div>
+    <div id="spreads" style="display:grid;gap:16px"></div>
+  </section>
+
+  <section id="sec-read" aria-labelledby="h-read" hidden>
+    <div class="sec-head">
+      <div class="sec-num">04</div>
+      <h2 id="h-read">카드 풀이</h2>
+      <p id="read-sub"></p>
+    </div>
+    <div id="reading"></div>
+    <p class="meta" id="count"></p>
+    <div class="closing">
+      <p>카드는 정해진 운명이 아니라 지금의 흐름을 비추는 거울이에요. 오늘 읽은 문장 중 한 줄만 붙잡고 움직여 보세요.</p>
+      <div class="btns" style="justify-content:center">
+        <button class="btn primary" id="copy" type="button">풀이 전체 복사</button>
+        <button class="btn" id="again" type="button">다른 주제로 다시 보기</button>
+      </div>
+      <div class="toast" id="toast" role="status"></div>
+    </div>
+  </section>
+
+  <footer>
+    카드 그림: 라이더-웨이트 타로 (Pamela Colman Smith, 1909, 퍼블릭 도메인)<br>
+    타로 풀이는 마음을 돌아보기 위한 참고용이며, 중요한 결정은 충분한 정보와 함께 스스로 내려 주세요.<br>
+    <a href="../">아로마 감정카드 · Notice &amp; Move Forward</a>
+  </footer>
+</main>
+
+<script src="data.js"></script>
+<script>
+"use strict";
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const CARDS = window.TAROT_CARDS || [];
+const BY_ID = Object.fromEntries(CARDS.map(c => [c.id, c]));
+const IMG = id => `cards/${id}.webp`;
+
+/* ---------- 주제와 11장 자리 ----------
+   각 자리: [섹션 키, 짧은 이름, 자리 제목, 자리 설명, 쓰는 필드들] */
+const TOPICS = {
+  love: {
+    name: "연애운", art: "m06", group: "lv",
+    desc: "지금의 관계, 그 사람의 속마음, 앞으로의 흐름",
+    q: "예) 그 사람은 나를 어떻게 생각하고 있을까요?",
+    secs: [["now", "현재 상황"], ["them", "상대방의 속마음"], ["me", "나의 속마음"], ["want", "내가 원하는 것"], ["next", "앞으로 어떻게 되는지"], ["adv", "조언"], ["word", "새길 말"]],
+    pos: [
+      ["now", "지금의 관계", "지금 두 사람의 관계", "첫 번째 자리는 지금 두 사람 사이에 흐르는 공기를 보여 줘요. 겉으로 드러난 사건보다, 함께 있을 때 느껴지는 온도와 거리감이 이 카드에 담겨 있어요. 당신이 직접 고른 열쇠 카드가 바로 이 자리에 놓였답니다.", ["core", "love"]],
+      ["now", "숨은 흐름", "관계를 움직이는 숨은 흐름", "두 번째 자리는 지금의 관계를 밀어 주거나 막고 있는 보이지 않는 힘이에요. 타이밍, 주변 환경, 지난 기억처럼 두 사람이 미처 의식하지 못한 채 영향을 받는 요소가 여기에 나타나요.", ["love", "core"]],
+      ["them", "그의 태도", "그 사람이 겉으로 보이는 태도", "세 번째 자리는 그 사람이 말투와 연락, 행동으로 드러내는 모습이에요. 당신이 지금 눈으로 확인하고 있는 그 사람의 반응이 왜 그런 모양인지를 이 카드가 설명해 줘요.", ["love", "partner"]],
+      ["them", "그의 진심", "그 사람의 진짜 속마음", "네 번째 자리는 그 사람이 쉽게 꺼내지 않는 진심이에요. 겉모습과 속마음이 같을 수도, 전혀 다를 수도 있어요. 세 번째 카드와 나란히 놓고 읽으면 그 사람의 마음이 입체적으로 보여요.", ["partner", "core"]],
+      ["me", "드러낸 마음", "내가 드러내는 마음", "다섯 번째 자리는 당신이 그 사람에게 보여 주고 있는 마음이에요. 의도했든 아니든 상대에게 전해지고 있는 당신의 모습이 여기에 담겨 있어요.", ["self", "love"]],
+      ["me", "숨은 진심", "내 안에 숨은 진심", "여섯 번째 자리는 당신 자신도 다 알아차리지 못한 내면의 감정이에요. 불안, 기대, 서운함처럼 마음 깊은 곳에서 관계를 움직이는 감정을 비춰 줘요.", ["self", "core"]],
+      ["want", "바라는 것", "내가 이 관계에서 정말 원하는 것", "일곱 번째 자리는 당신이 이 관계에서 진짜로 바라는 것이에요. 머리로 정한 목표가 아니라 마음이 끌리는 방향을 보여 주기 때문에, 이 카드를 알면 다음 행동의 기준이 생겨요.", ["choice", "love"]],
+      ["next", "가까운 흐름", "가까운 미래의 흐름", "여덟 번째 자리는 앞으로 한두 달 사이에 펼쳐질 가까운 흐름이에요. 지금의 마음과 행동이 그대로 이어진다면 어떤 장면이 찾아올지를 미리 보여 줘요.", ["future", "love"]],
+      ["next", "다다를 결과", "이 관계가 다다를 결과", "아홉 번째 자리는 이 관계가 결국 다다르게 될 모습이에요. 결과는 고정된 것이 아니라 지금의 선택에 따라 달라질 수 있으니, 바꾸고 싶은 부분이 있다면 열 번째 조언 카드에서 힌트를 찾으세요.", ["future", "core"]],
+      ["adv", "조언", "지금 당신에게 필요한 조언", "열 번째 자리는 카드가 당신에게 건네는 구체적인 조언이에요. 관계의 흐름을 좋은 쪽으로 돌리기 위해 오늘부터 할 수 있는 일을 알려 줘요.", ["advice", "love"]],
+      ["word", "새길 말", "마음에 새길 말", "마지막 열한 번째 자리는 이 리딩 전체를 한 문장으로 묶어 주는 카드예요. 흔들리는 날 꺼내 볼 수 있도록, 이 카드의 메시지를 마음에 새겨 두세요.", ["advice", "core"]]
+    ]
+  },
+  reunion: {
+    name: "재회운", art: "c02", group: "lv",
+    desc: "헤어진 그 사람의 마음과 다시 이어질 흐름",
+    q: "예) 헤어진 그 사람과 다시 만날 수 있을까요?",
+    secs: [["now", "현재 상황"], ["them", "상대방의 속마음"], ["me", "나의 속마음"], ["want", "내가 원하는 것"], ["next", "앞으로 어떻게 되는지"], ["adv", "조언"], ["word", "새길 말"]],
+    pos: [
+      ["now", "지금의 상황", "헤어진 뒤 지금의 상황", "첫 번째 자리는 이별 이후 두 사람 사이에 남아 있는 현재의 상황이에요. 연락이 끊겼는지, 미련이 남았는지, 서로를 어떻게 기억하는지가 이 카드에 담겨 있어요. 당신이 직접 고른 열쇠 카드가 이 자리에 놓였답니다.", ["core", "love"]],
+      ["now", "이별의 원인", "이별의 원인과 남은 숙제", "두 번째 자리는 두 사람이 멀어지게 된 근본적인 이유, 그리고 다시 만나려면 풀어야 할 숙제예요. 같은 이유로 다시 헤어지지 않으려면 이 카드를 꼭 기억해 두세요.", ["love", "core"]],
+      ["them", "그의 모습", "그 사람이 지금 보이는 모습", "세 번째 자리는 이별 후 그 사람이 겉으로 보이는 모습이에요. 괜찮은 척하는지, 정말 정리했는지, 주변에 어떤 모습을 보이고 있는지 드러나요.", ["love", "partner"]],
+      ["them", "그의 진심", "그 사람의 진짜 속마음과 미련", "네 번째 자리는 그 사람이 혼자 있을 때 떠올리는 진짜 마음이에요. 당신에 대한 그리움과 미련, 혹은 정리된 감정이 어느 정도인지를 이 카드가 보여 줘요. 세 번째 카드와 비교해 보면 겉과 속의 차이가 보여요.", ["partner", "core"]],
+      ["me", "드러낸 마음", "내가 보이는 마음", "다섯 번째 자리는 이별 후 당신이 그 사람과 주변에 보이고 있는 모습이에요. 당신의 태도가 상대에게 어떤 신호로 읽히고 있는지 살펴보세요.", ["self", "love"]],
+      ["me", "숨은 진심", "내 안에 숨은 진심", "여섯 번째 자리는 당신 마음 깊은 곳의 감정이에요. 그리움인지, 자존심인지, 외로움인지, 아직 풀리지 않은 억울함인지를 정직하게 비춰 줘요.", ["self", "core"]],
+      ["want", "바라는 것", "내가 정말 원하는 것", "일곱 번째 자리는 당신이 진짜로 원하는 것이에요. 그 사람과의 재회 자체인지, 그때의 내가 받지 못한 이해와 사과인지, 아니면 마음의 평화인지를 알려 줘요. 이것을 알아야 재회의 방향이 정해져요.", ["choice", "love"]],
+      ["next", "다시 닿을 흐름", "다시 연락이 닿을 흐름", "여덟 번째 자리는 앞으로 한두 달 사이 두 사람 사이에 생길 흐름이에요. 연락의 계기, 우연한 마주침, 혹은 각자의 시간이 필요한 시기인지를 보여 줘요.", ["future", "love"]],
+      ["next", "재회의 결과", "재회의 결과", "아홉 번째 자리는 재회를 향한 흐름이 결국 다다를 모습이에요. 결과는 지금의 태도에 따라 바뀔 수 있으니, 원하는 결과가 아니라면 열 번째 조언 카드를 더 깊이 읽어 주세요.", ["future", "core"]],
+      ["adv", "조언", "다시 이어지기 위한 조언", "열 번째 자리는 카드가 당신에게 건네는 구체적인 조언이에요. 재회를 바란다면 무엇을 하고 무엇을 멈춰야 하는지, 혹은 나를 지키기 위해 무엇이 필요한지 알려 줘요.", ["advice", "love"]],
+      ["word", "새길 말", "마음에 새길 말", "마지막 열한 번째 자리는 이 리딩 전체를 한 문장으로 묶어 주는 카드예요. 연락하고 싶어 마음이 흔들리는 날, 이 문장을 먼저 떠올려 보세요.", ["advice", "core"]]
+    ]
+  },
+  career: {
+    name: "진로운", art: "p08", group: "cr",
+    desc: "좋아하는 것과 힘든 것, 준비할 것과 앞으로의 흐름",
+    q: "예) 지금 하는 일을 계속해도 될까요? 나에게 맞는 길은?",
+    secs: [["now", "현재 상황"], ["like", "본인이 평소에 좋아하는 것"], ["hard", "본인이 힘들어하는 부분"], ["over", "극복해야 할 점"], ["learn", "배우면 좋은 점"], ["solve", "해결해야 할 것"], ["prep", "준비해야 할 것"], ["next", "앞으로의 흐름"], ["adv", "조언"]],
+    pos: [
+      ["now", "지금의 자리", "지금 내가 서 있는 자리", "첫 번째 자리는 지금 당신의 일과 진로가 놓인 전반적인 상황이에요. 당신이 직접 고른 열쇠 카드가 이 자리에 놓였기 때문에, 이번 리딩 전체를 관통하는 주제이기도 해요.", ["core", "career"]],
+      ["like", "좋아하는 것", "본인이 평소에 좋아하는 것", "두 번째 자리는 당신이 평소에 좋아하고 자연스럽게 끌리는 것이에요. 시간 가는 줄 모르고 몰입하는 일, 칭찬받지 않아도 하고 싶은 일 속에 진로의 실마리가 숨어 있어요.", ["self", "career"]],
+      ["hard", "힘든 부분", "본인이 힘들어하는 부분", "세 번째 자리는 일과 진로에서 당신이 유독 힘들어하는 부분이에요. 약점이라기보다 에너지가 새는 지점이니, 이것을 알면 덜 지치는 방식으로 일할 수 있어요.", ["career", "core"]],
+      ["over", "극복할 점", "극복해야 할 점", "네 번째 자리는 한 단계 성장하기 위해 넘어서야 할 벽이에요. 습관, 두려움, 생각의 틀처럼 스스로 극복할 수 있는 과제가 이 카드에 담겨 있어요.", ["core", "advice"]],
+      ["learn", "배울 점", "배우면 좋은 점", "다섯 번째 자리는 앞으로 배우고 익히면 큰 힘이 될 기술과 태도예요. 지금 바로 공부를 시작하거나 경험을 쌓기 좋은 분야를 알려 줘요.", ["career", "advice"]],
+      ["solve", "해결할 것", "해결해야 할 것", "여섯 번째 자리는 지금 미루지 말고 정리해야 할 현실의 문제예요. 관계, 조건, 마음의 짐처럼 진로의 발목을 잡고 있는 것이 무엇인지 보여 줘요.", ["core", "career"]],
+      ["prep", "준비할 것", "준비해야 할 것", "일곱 번째 자리는 다가올 기회를 잡기 위해 미리 준비해 둘 것이에요. 자격, 포트폴리오, 돈, 인맥, 마음가짐처럼 구체적인 준비의 방향을 짚어 줘요.", ["advice", "future"]],
+      ["next", "가까운 흐름", "앞으로의 흐름 · 가까운 시기", "여덟 번째 자리는 앞으로 몇 달 사이 일과 진로에 찾아올 흐름이에요. 지금의 노력이 이어진다면 어떤 변화가 먼저 나타날지를 보여 줘요.", ["future", "career"]],
+      ["next", "먼 흐름", "앞으로의 흐름 · 1년 뒤의 모습", "아홉 번째 자리는 조금 더 멀리, 1년 정도 뒤 당신의 진로가 다다를 모습이에요. 결과는 정해진 것이 아니라 지금의 준비에 따라 달라질 수 있어요.", ["future", "core"]],
+      ["adv", "조언", "지금 필요한 조언", "열 번째 자리는 카드가 당신에게 건네는 구체적인 조언이에요. 진로의 흐름을 좋은 쪽으로 돌리기 위해 이번 주부터 할 수 있는 일을 알려 줘요.", ["advice", "career"]],
+      ["adv", "새길 말", "마음에 새길 한마디", "마지막 열한 번째 자리는 이 리딩 전체를 한 문장으로 묶어 주는 카드예요. 일이 버겁게 느껴지는 날 꺼내 볼 수 있도록 마음에 새겨 두세요.", ["core", "self"]]
+    ]
+  },
+  choice: {
+    name: "선택의 기로", art: "s02", group: "ch",
+    desc: "A와 B, 두 갈래 길에 각각 열한 장씩",
+    q: "예) 이직을 해야 할지, 지금 회사에 남아야 할지 고민이에요.",
+    secs: [["now", "현재 상황"], ["why", "이런 상황이 된 이유"], ["want", "원하는 것"], ["how", "해결 방법"], ["next", "앞으로의 흐름"], ["adv", "조언"]],
+    pos: [
+      ["now", "현재 상황", "이 길 앞의 현재 상황", "첫 번째 자리는 이 선택지 앞에 선 당신의 현재 상황이에요. 이 길을 떠올릴 때 지금 마음과 환경이 어떤 모양인지 보여 줘요. 당신이 직접 고른 열쇠 카드가 이 자리에 놓였어요.", ["choice", "core"]],
+      ["why", "드러난 이유", "이런 상황이 된 이유 · 겉으로 드러난 이유", "두 번째 자리는 이 선택지가 떠오르게 된 눈에 보이는 이유예요. 상황, 조건, 사람처럼 바깥에서 주어진 계기가 무엇이었는지 짚어 줘요.", ["core", "choice"]],
+      ["why", "숨은 이유", "이런 상황이 된 이유 · 마음속의 이유", "세 번째 자리는 이 선택을 고민하게 만든 마음속 이유예요. 겉으로 말하는 이유 뒤에 숨은 감정과 바람이 무엇인지 비춰 줘요.", ["self", "core"]],
+      ["want", "바라는 모습", "원하는 것 · 이 길에서 바라는 모습", "네 번째 자리는 이 길을 택했을 때 당신이 기대하는 모습이에요. 이 선택으로 얻고 싶은 것이 무엇인지 분명하게 해 줘요.", ["choice", "self"]],
+      ["want", "진짜 바람", "원하는 것 · 마음 깊은 곳의 바람", "다섯 번째 자리는 그 기대 밑에 깔린 진짜 바람이에요. 이 선택이 그 바람을 채워 줄 수 있는지 함께 살펴보세요.", ["self", "advice"]],
+      ["how", "해결의 열쇠", "해결 방법 · 이 길에서의 열쇠", "여섯 번째 자리는 이 길에서 마주칠 고민을 풀어 갈 방법이에요. 이 선택지를 택했을 때 무엇을 해야 일이 풀리는지 알려 줘요.", ["advice", "core"]],
+      ["how", "도움의 손길", "해결 방법 · 도움이 되는 것", "일곱 번째 자리는 이 길에서 당신을 돕는 사람, 자원, 태도예요. 혼자 버티지 않아도 되는 부분이 어디인지 보여 줘요.", ["advice", "choice"]],
+      ["next", "시작", "앞으로의 흐름 · 시작", "여덟 번째 자리는 이 길을 택하고 나서 처음 맞이할 장면이에요. 선택 직후의 분위기와 첫 반응을 미리 보여 줘요.", ["future", "core"]],
+      ["next", "전개", "앞으로의 흐름 · 전개", "아홉 번째 자리는 이 길이 무르익어 가는 중간 과정이에요. 시간이 지나며 어떤 고비나 기회가 찾아오는지 알려 줘요.", ["future", "choice"]],
+      ["next", "결과", "앞으로의 흐름 · 결과", "열 번째 자리는 이 길이 결국 다다르게 될 모습이에요. 두 선택지의 이 자리를 나란히 비교해 보면 판단에 큰 도움이 돼요.", ["future", "advice"]],
+      ["adv", "조언", "이 길을 위한 조언", "마지막 열한 번째 자리는 이 길을 택하든 택하지 않든 꼭 기억해야 할 조언이에요.", ["advice", "core"]]
+    ]
+  }
+};
+const TOPIC_ORDER = ["love", "reunion", "career", "choice"];
+
+/* 자리마다 읽는 카드 문장 (TOPICS의 기본값을 덮어씀) */
+const LV_FIELDS = [["core", "love", "self"], ["love", "core", "advice"], ["love", "partner", "core"], ["partner", "core", "future"], ["self", "love", "advice"], ["self", "core", "choice"], ["choice", "love", "self"], ["future", "love", "advice"], ["future", "core", "love"], ["advice", "love", "core"], ["advice", "core", "future"]];
+const FIELDS = {
+  love: LV_FIELDS, reunion: LV_FIELDS,
+  career: [["core", "career", "self"], ["self", "career", "core"], ["career", "core", "self"], ["core", "advice", "self"], ["career", "advice", "future"], ["core", "career", "advice"], ["advice", "future", "career"], ["future", "career", "core"], ["future", "core", "career"], ["advice", "career", "self"], ["core", "self", "advice"]],
+  choice: [["choice", "core", "self"], ["core", "choice", "self"], ["self", "core", "future"], ["choice", "self", "future"], ["self", "advice", "core"], ["advice", "core", "choice"], ["advice", "choice", "self"], ["future", "core", "choice"], ["future", "choice", "core"], ["future", "advice", "choice"], ["advice", "core", "future"]]
+};
+/* 자리마다 스스로에게 던져 볼 질문 */
+const REFLECT = {
+  love: ["요즘 그 사람과 있을 때 가장 자주 느끼는 감정은 무엇인가요? 설렘, 편안함, 불안 가운데 하나만 골라 보세요.", "두 사람 사이에 말하지 않고 넘어간 일이 있나요? 그 일이 지금의 거리를 만들고 있지는 않은지 돌아보세요.", "그 사람의 최근 말과 행동 중 가장 마음에 남은 장면 하나를 떠올려 보세요. 그 장면을 이 카드의 눈으로 다시 보면 어떻게 보이나요?", "만약 그 사람이 지금 솔직하게 한 문장만 말할 수 있다면, 어떤 말을 할 것 같나요?", "그 사람이 보기에 요즘의 당신은 어떤 사람일까요? 내가 보여 주고 싶은 모습과 같은가요?", "그 사람에게 한 번도 꺼내지 못한 말이 있다면, 지금 마음속으로 한 번 말해 보세요.", "관계가 원하는 대로 흘러간다면 1년 뒤 두 사람은 어떤 하루를 보내고 있을까요?", "앞으로 한 달 동안 이 관계에서 꼭 지키고 싶은 것 한 가지는 무엇인가요?", "이 결과를 바꾸고 싶다면, 혹은 지키고 싶다면 당신이 할 수 있는 가장 작은 일은 무엇일까요?", "이번 주 안에 실천할 수 있는 행동 하나를 정하고 날짜를 적어 보세요.", "이 문장을 읽었을 때 마음에 가장 먼저 떠오른 얼굴과 장면은 무엇인가요?"],
+  reunion: ["이별 뒤 그 사람을 떠올리는 순간은 주로 언제인가요? 그 순간 느끼는 감정이 그리움인지 외로움인지 구분해 보세요.", "같은 이유로 다시 헤어지지 않으려면, 두 사람 중 누가 무엇을 바꿔야 할까요?", "그 사람이 지금 주변에 보이는 모습 중에 당신이 알고 있는 그 사람답지 않은 부분이 있나요?", "그 사람이 혼자 있는 밤에 당신을 떠올린다면, 어떤 장면을 가장 먼저 떠올릴까요?", "이별 후 당신의 행동은 그 사람에게 어떤 신호로 읽히고 있을까요?", "다시 만난다면 가장 먼저 듣고 싶은 말은 무엇인가요? 그 말이 당신 마음의 진짜 바람을 알려 줘요.", "그 사람과 다시 만나지 않더라도 채울 수 있는 바람이 있다면 무엇일까요?", "연락이 닿는다면 어떤 첫 문장을 건네고 싶나요? 미리 적어 두면 마음이 덜 흔들려요.", "재회가 이루어진다면 예전과 무엇이 달라야 행복할 수 있을까요?", "재회를 위해 멈춰야 할 행동 하나, 새로 시작할 행동 하나를 적어 보세요.", "연락하고 싶어 마음이 흔들리는 날, 이 문장을 세 번 소리 내어 읽어 보세요."],
+  career: ["지금 하는 일에서 가장 만족스러운 순간과 가장 버거운 순간을 하나씩 떠올려 보세요.", "누가 시키지 않아도 시간 가는 줄 모르고 했던 일은 무엇이었나요?", "일이 끝나고 유독 지쳐 있는 날, 그날 무슨 일을 했는지 돌아보세요.", "이 벽을 넘은 1년 뒤의 나를 상상하면 무엇이 가장 달라져 있을까요?", "이번 달 안에 시작할 수 있는 가장 작은 공부는 무엇인가요?", "지금 미루고 있는 결정이나 대화가 있다면, 그것을 끝내는 데 필요한 것은 무엇인가요?", "다가올 기회를 위해 지금 바로 목록에 적을 수 있는 준비물 세 가지는 무엇인가요?", "앞으로 몇 달 동안 어떤 소식이나 기회가 오면 붙잡고 싶나요?", "1년 뒤 누군가 당신의 일을 소개한다면 어떤 문장으로 소개되기를 바라나요?", "이번 주에 실천할 행동 하나를 정하고 달력에 적어 보세요.", "일이 버거운 날 이 문장을 떠올리면 어떤 마음이 드나요?"],
+  choice: ["이 길을 떠올리면 몸이 먼저 어떻게 반응하나요? 가슴이 뛰는지, 어깨가 무거워지는지 살펴보세요.", "이 선택지가 처음 떠오른 날, 무슨 일이 있었나요?", "다른 사람에게 말하지 않은, 이 길을 생각하게 된 진짜 이유는 무엇인가요?", "이 길을 택하고 6개월이 지났을 때, 가장 바라는 장면은 무엇인가요?", "그 바람은 꼭 이 길이어야만 채워질까요, 다른 길로도 채울 수 있을까요?", "이 길에서 가장 걱정되는 문제 하나와 그 해결책 하나를 적어 보세요.", "이 길을 걸을 때 의지할 수 있는 사람이나 자원은 누구, 무엇인가요?", "선택 직후 가장 먼저 해야 할 일은 무엇일까요?", "중간에 힘든 고비가 왔을 때 무엇이 당신을 다시 일으킬까요?", "이 길의 끝에서 당신은 무엇을 얻고 무엇을 내려놓게 될까요?", "이 조언을 지금 당장 적용한다면 무엇부터 바꿀 수 있을까요?"]
+};
+TOPIC_ORDER.forEach(k => TOPICS[k].pos.forEach((p, i) => { p[4] = FIELDS[k][i]; p[5] = REFLECT[k][i]; }));
+
+/* ---------- 해석에 덧붙는 결 ---------- */
+const SUIT_NAME = { m: "메이저 아르카나", w: "완드", c: "컵", s: "소드", p: "펜타클" };
+const SUIT_TXT = {
+  m: {
+    lv: "메이저 아르카나가 이 자리에 놓였다는 건, 이 부분이 단순한 감정의 기복이 아니라 관계 전체의 방향을 바꿀 만큼 큰 흐름이라는 뜻이에요. 의지만으로 서두르기보다 흐름을 읽고 맞춰 가는 지혜가 필요해요.",
+    cr: "메이저 아르카나가 나왔다는 것은 이 부분이 당신 진로의 굵은 줄기와 맞닿아 있다는 신호예요. 작은 기술의 문제가 아니라 삶의 방향, 일에 대한 태도와 가치관이 걸린 주제로 받아들여 주세요.",
+    ch: "메이저 아르카나는 이 선택이 일시적인 판단을 넘어 당신 삶의 한 장을 바꾸는 계기가 될 수 있음을 알려 줘요. 이 자리의 메시지는 가볍게 넘기지 말고 오래 곱씹어 볼 만해요."
+  },
+  w: {
+    lv: "완드(불)의 기운이 담긴 카드라서, 이 부분에서는 설렘과 끌림, 먼저 다가가려는 열정이 중요한 역할을 해요. 다만 불은 빨리 타오르는 만큼 쉽게 지칠 수 있으니 속도를 조절하는 것이 관건이에요.",
+    cr: "완드(불)의 기운은 의욕, 도전, 추진력을 뜻해요. 이 부분에서는 머리로 계산하기보다 마음이 끌리는 쪽으로 먼저 움직여 보는 실행력이 진로의 열쇠가 돼요.",
+    ch: "완드(불)의 기운을 지닌 카드라서, 이 선택지에는 열정과 도전, 새로운 시도의 에너지가 실려 있어요. 가슴이 뛰는 쪽인지 스스로에게 물어보면 답이 더 선명해져요."
+  },
+  c: {
+    lv: "컵(물)의 기운은 감정, 교감, 마음의 흐름을 상징해요. 이 부분은 말과 조건보다 서로가 느끼는 정서가 핵심이라, 마음을 얼마나 솔직하게 나누느냐에 따라 흐름이 달라져요.",
+    cr: "컵(물)의 기운은 일에서의 보람, 사람과의 관계, 감정적 만족을 뜻해요. 당신에게 일은 돈보다 마음이 통하는가가 중요한 영역이라는 점을 이 카드가 짚어 줘요.",
+    ch: "컵(물)의 기운을 지닌 카드라서, 이 선택지는 감정적인 만족과 관계의 문제와 깊이 이어져 있어요. 이 길을 택했을 때 내 마음이 편안할지, 누구와 함께하게 될지 살펴보세요."
+  },
+  s: {
+    lv: "소드(공기)의 기운은 생각, 말, 판단을 상징해요. 이 부분에서는 감정 그 자체보다 머릿속 생각과 오해, 말 한마디가 관계를 크게 좌우하니 대화의 방식이 무척 중요해요.",
+    cr: "소드(공기)의 기운은 분석력, 판단력, 결단을 뜻해요. 이 부분에서는 상황을 냉정하게 따져 보고 불필요한 것을 잘라내는 결단이 필요해요. 생각이 많아 지치지 않도록 정리하는 습관이 도움이 돼요.",
+    ch: "소드(공기)의 기운을 지닌 카드라서, 이 선택지에는 이성적인 판단과 결단의 과제가 놓여 있어요. 감정보다 사실과 조건을 차분히 적어 보며 비교하면 흐릿했던 부분이 선명해져요."
+  },
+  p: {
+    lv: "펜타클(흙)의 기운은 현실, 안정, 꾸준함을 상징해요. 이 부분에서는 화려한 이벤트보다 일상의 신뢰와 생활 여건, 시간이 쌓아 주는 안정감이 관계를 지탱해요.",
+    cr: "펜타클(흙)의 기운은 돈, 성과, 기술, 현실적인 기반을 뜻해요. 이 부분에서는 눈에 보이는 결과물과 꾸준한 실력 쌓기가 진로의 든든한 바탕이 돼요.",
+    ch: "펜타클(흙)의 기운을 지닌 카드라서, 이 선택지에서는 돈, 시간, 안정성 같은 현실 조건이 핵심이에요. 길게 봤을 때 무엇이 남는지, 생활의 기반이 탄탄해지는지 따져 보세요."
+  }
+};
+const NUM_TXT = [null,
+  "에이스는 모든 것의 씨앗이에요. 아직 작지만 무엇이든 될 수 있는 순수한 가능성이 시작되는 지점이라는 뜻을 함께 품고 있어요.",
+  "숫자 2는 만남과 균형, 그리고 선택을 뜻해요. 두 힘이 마주 보며 조율해야 하는 단계라는 점을 기억해 두세요.",
+  "숫자 3은 성장과 확장의 수예요. 처음의 씨앗이 첫 결실을 맺으며 바깥으로 뻗어 나가는 단계를 보여 줘요.",
+  "숫자 4는 안정과 기반을 뜻해요. 지금까지 쌓은 것을 지키고 다지려는 힘이 작용하지만, 그만큼 정체되기 쉬운 수이기도 해요.",
+  "숫자 5는 흔들림과 시험의 수예요. 안정이 깨지며 갈등이나 상실이 찾아오지만, 그것이 다음 성장으로 넘어가는 문이 되기도 해요.",
+  "숫자 6은 조화와 회복을 뜻해요. 흔들림을 지나 주고받음이 다시 균형을 찾는 단계라는 의미가 담겨 있어요.",
+  "숫자 7은 성찰과 도전의 수예요. 겉으로 보이는 것 너머를 살피고, 스스로의 신념을 시험받는 시기를 뜻해요.",
+  "숫자 8은 움직임과 힘의 수예요. 멈춰 있던 것이 속도를 내거나, 스스로 만든 틀을 깨야 하는 단계를 보여 줘요.",
+  "숫자 9는 거의 다 왔다는 신호예요. 결실 직전의 충만함과 마지막 고비가 함께 있는 수랍니다.",
+  "숫자 10은 한 순환의 끝이자 새로운 순환의 시작이에요. 무언가가 완성되거나 한계에 다다라 다음 국면으로 넘어가야 할 때를 뜻해요.",
+  "페이지(시종) 카드는 배우는 사람, 소식을 전하는 사람이에요. 아직 서툴지만 호기심과 순수한 마음으로 새로운 흐름을 맞이하는 단계를 나타내요.",
+  "나이트(기사) 카드는 행동하고 움직이는 사람이에요. 목표를 향해 달려가는 추진력이 있지만, 그 속도와 방향을 살펴야 한다는 뜻도 함께 담겨 있어요.",
+  "퀸(여왕) 카드는 그 기운을 안에서 품고 돌보는 사람이에요. 겉으로 드러내기보다 깊이 이해하고 감싸 안는 성숙한 힘을 보여 줘요.",
+  "킹(왕) 카드는 그 기운을 다스리고 책임지는 사람이에요. 경험에서 나온 안정감과 결정권, 바깥으로 영향력을 펼치는 단계를 뜻해요."
+];
+const REV_TXT = [
+  "역방향으로 나온 카드는 그 기운이 막혀 있거나, 안으로 향해 있거나, 아직 무르익지 않았다는 뜻이에요. 나쁜 신호라기보다 여기를 살펴 달라는 표시로 받아들여 주세요.",
+  "카드가 거꾸로 놓였다는 건 이 자리의 에너지가 지나치거나 부족해 균형을 잃었다는 의미예요. 힘을 빼야 할지 더해야 할지 스스로에게 물어보세요.",
+  "역방향은 바깥보다 내면에서 먼저 일이 벌어지고 있다는 신호이기도 해요. 겉으로 드러나기 전에 마음속에서 정리할 기회가 아직 남아 있어요."
+];
+
+/* 카드의 밝기(흐름 지수용). 정방향 값, 역방향은 아래 규칙으로 바뀜 */
+const VAL = {
+  m: [1, 2, 1, 2, 1, 1, 2, 2, 2, 0, 2, 1, 0, -1, 1, -2, -2, 2, -1, 2, 1, 2],
+  w: [2, 1, 2, 2, -1, 2, 0, 2, 0, -1, 1, 1, 2, 2],
+  c: [2, 2, 2, 0, -2, 1, -1, -1, 2, 2, 1, 1, 2, 2],
+  s: [1, -1, -2, 0, -2, 0, -1, -2, -2, -2, 0, 0, 1, 1],
+  p: [2, 0, 2, 0, -2, 1, 0, 1, 2, 2, 1, 1, 2, 2]
+};
+const suitOf = id => id[0];
+const numOf = id => parseInt(id.slice(1), 10);
+function val(d) {
+  const s = suitOf(d.id), n = numOf(d.id);
+  const v = s === "m" ? VAL.m[n] : VAL[s][n - 1];
+  return d.rev ? (v > 0 ? -0.5 * v : 0.25 - 0.25 * v) : v;
+}
+
+/* ---------- 상태 ---------- */
+const S = { topic: null, deck: [], phase: null, picks: {}, spreads: {}, labels: {} };
+
+function rnd(n) { const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0] % n; }
+function shuffle() {
+  const ids = CARDS.map(c => c.id);
+  for (let i = ids.length - 1; i > 0; i--) { const j = rnd(i + 1); [ids[i], ids[j]] = [ids[j], ids[i]]; }
+  return ids.map(id => ({ id, rev: rnd(100) < 30 }));
+}
+
+/* ---------- 01 주제 ---------- */
+function renderTopics() {
+  $("#topics").innerHTML = TOPIC_ORDER.map(k => {
+    const t = TOPICS[k];
+    return `<button class="topic" type="button" data-k="${k}" aria-pressed="false"><img src="${IMG(t.art)}" alt=""><div><b>${t.name}</b><span>${t.desc}</span></div></button>`;
+  }).join("");
+  $("#topics").addEventListener("click", e => {
+    const b = e.target.closest(".topic"); if (!b) return;
+    selectTopic(b.dataset.k);
+  });
+}
+function selectTopic(k) {
+  S.topic = k;
+  document.querySelectorAll(".topic").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === k)));
+  const t = TOPICS[k];
+  $("#ask").hidden = false;
+  $("#q").placeholder = t.q;
+  const isCh = k === "choice";
+  $("#f-a").hidden = !isCh; $("#f-b").hidden = !isCh;
+  $("#ask-note").textContent = isCh
+    ? "두 갈래 길을 A와 B로 적어 주세요. A를 위한 다섯 장에서 한 장, B를 위한 다섯 장에서 한 장을 고르면 각각 열한 장씩 펼쳐집니다."
+    : "질문을 적지 않아도 괜찮아요. 카드를 뽑는 동안 마음속으로 질문을 한 번 떠올려 주세요.";
+  $("#warn").textContent = "";
+  ["#sec-draw", "#sec-spread", "#sec-read"].forEach(s => $(s).hidden = true);
+}
+
+/* ---------- 02 덱 펼치기와 다섯 장 ---------- */
+function startDraw() {
+  if (!S.topic) return;
+  if (S.topic === "choice") {
+    const a = $("#optA").value.trim(), b = $("#optB").value.trim();
+    if (!a || !b) { $("#warn").textContent = "A와 B 선택지를 모두 적어 주세요."; return; }
+    S.labels = { A: a, B: b };
+  }
+  $("#warn").textContent = "";
+  S.deck = shuffle(); S.picks = {}; S.spreads = {};
+  S.phase = S.topic === "choice" ? "A" : "main";
+  ["#sec-spread", "#sec-read"].forEach(s => $(s).hidden = true);
+  $("#spreads").innerHTML = ""; $("#reading").innerHTML = "";
+  $("#sec-draw").hidden = false;
+  layFan();
+  layFive();
+  $("#sec-draw").scrollIntoView();
+}
+function layFan() {
+  const n = S.deck.length;
+  const fan = $("#fan");
+  fan.innerHTML = Array.from({ length: n }, () => `<div class="fb"><div class="back"><span></span></div></div>`).join("");
+  const els = [...fan.children];
+  els.forEach(el => el.style.transform = "rotate(0deg)");
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    els.forEach((el, i) => { el.style.transform = `rotate(${-55 + (110 * i) / (n - 1)}deg)`; });
+  }));
+}
+function remaining() {
+  const used = new Set(Object.values(S.spreads).flat().map(d => d.id));
+  return S.deck.filter(d => !used.has(d.id));
+}
+function layFive() {
+  const pool = remaining();
+  const step = Math.floor(pool.length / 5);
+  S.five = [0, 1, 2, 3, 4].map(i => i * step + rnd(step));
+  const isCh = S.topic === "choice";
+  const who = S.phase;
+  $("#table-cap").innerHTML = isCh
+    ? `<b>${who} · ${esc(S.labels[who])}</b>이 길을 떠올리며 한 장을 고르세요.`
+    : `<b>${TOPICS[S.topic].name}</b>질문을 떠올리며 한 장을 고르세요.`;
+  $("#five").innerHTML = S.five.map((p, i) =>
+    `<button class="pick flip" type="button" data-i="${i}" aria-label="${i + 1}번째 카드 고르기"><div class="inner"><div class="back"><span>✦</span></div><div class="front"></div></div></button>`).join("");
+  [...$("#five").children].forEach((el, i) => setTimeout(() => el.classList.add("in"), 500 + i * 120));
+  $("#reshuffle").hidden = isCh && who === "B";
+}
+function choose(i) {
+  const pool = remaining();
+  const start = S.five[i];
+  const spread = Array.from({ length: 11 }, (_, k) => pool[(start + k) % pool.length]);
+  S.spreads[S.phase] = spread;
+  const btns = [...$("#five").children];
+  btns.forEach((b, k) => { b.disabled = true; if (k !== i) b.classList.add("dim"); });
+  const b = btns[i];
+  b.classList.add("chosen");
+  b.querySelector(".front").innerHTML = cardImg(spread[0]);
+  b.classList.add("open");
+  setTimeout(() => {
+    if (S.topic === "choice" && S.phase === "A") {
+      S.phase = "B";
+      $("#draw-sub").textContent = "A를 위한 열한 장이 정해졌어요. 이번에는 B 선택지를 떠올리며, 남은 카드에서 꺼낸 다섯 장 가운데 한 장을 골라 주세요.";
+      layFive();
+      return;
+    }
+    $("#draw-sub").textContent = "78장의 카드를 섞어 펼쳤어요. 그중 다섯 장을 앞으로 꺼내 두었습니다. 질문을 떠올리며 마음이 가는 한 장을 누르면, 그 카드에 이어진 열한 장이 자동으로 놓입니다.";
+    showSpreads();
+  }, 1300);
+}
+const cardImg = d => `<img class="art${d.rev ? " rev" : ""}" src="${IMG(d.id)}" alt="${esc(BY_ID[d.id].ko)}${d.rev ? " 역방향" : ""}">`;
+
+/* ---------- 03 11장 배열 ---------- */
+function showSpreads() {
+  const t = TOPICS[S.topic];
+  const keys = S.topic === "choice" ? ["A", "B"] : ["main"];
+  $("#spreads").innerHTML = keys.map(k => `
+    <div class="spread-wrap">
+      ${k === "main" ? "" : `<div class="spread-title">${k} · ${esc(S.labels[k])}<small>이 길을 위한 열한 장</small></div>`}
+      <div class="spread">${S.spreads[k].map((d, i) => `
+        <div class="slot${i === 0 ? " key" : ""}">
+          <div class="sl-lab"><b>${i + 1}</b>${t.pos[i][1]}</div>
+          <div class="flip"><div class="inner"><div class="back"><span>✦</span></div><div class="front">${cardImg(d)}</div></div></div>
+          <div class="nm">${esc(BY_ID[d.id].ko)}${d.rev ? "<br><small style='color:var(--bad);font-weight:400'>역방향</small>" : ""}</div>
+        </div>`).join("")}
+      </div>
+    </div>`).join("");
+  $("#sec-spread").hidden = false;
+  $("#sec-spread").scrollIntoView();
+  const flips = [...document.querySelectorAll("#spreads .flip")];
+  flips.forEach((f, i) => setTimeout(() => f.classList.add("open"), 400 + i * 160));
+  setTimeout(renderReading, 400 + flips.length * 160 + 500);
+}
+
+/* ---------- 04 풀이 ---------- */
+const nameOf = d => `${d.rev ? "역방향 " : ""}${BY_ID[d.id].ko}`;
+const kwOf = d => (d.rev ? BY_ID[d.id].kwr : BY_ID[d.id].kw) || [];
+const txt = (d, f) => ((d.rev ? BY_ID[d.id].rev : BY_ID[d.id].up) || {})[f] || "";
+let revN = 0;
+
+function cardBlock(d, i, pos, group, isKey) {
+  const c = BY_ID[d.id], s = suitOf(d.id), n = numOf(d.id);
+  const kws = kwOf(d);
+  const paras = [];
+  paras.push(pos[3]);
+  paras.push(`이 자리에 ${d.rev ? "역방향으로 " : ""}${c.ko} 카드가 나왔어요. ${kws.map(k => `'${k}'`).join(", ")}의 기운을 품은 카드예요.${isKey ? " 다섯 장 가운데 당신이 직접 고른 카드라서, 이 카드의 메시지는 리딩 전체의 열쇠가 됩니다." : ""}`);
+  pos[4].forEach(f => { const t = txt(d, f); if (t) paras.push(t); });
+  paras.push(SUIT_TXT[s][group]);
+  if (s !== "m") paras.push(NUM_TXT[n]);
+  if (d.rev) paras.push(REV_TXT[revN++ % REV_TXT.length]);
+  const ask = pos[5] ? `<p class="note">스스로에게 물어보기 · ${esc(pos[5])}</p>` : "";
+  return `
+    <article class="reading">
+      <div class="mini">${cardImg(d)}</div>
+      <div class="body">
+        <div class="pos">${i + 1}번 자리 · ${pos[2]}</div>
+        <h4>${esc(c.ko)}${d.rev ? " (역방향)" : ""}<small>${esc(c.en)}</small></h4>
+        <div class="chips">${kws.map(k => `<span class="chip${d.rev ? " rev" : ""}">${esc(k)}</span>`).join("")}</div>
+        ${paras.map(p => `<p>${esc(p)}</p>`).join("")}
+        ${ask}
+      </div>
+    </article>`;
+}
+
+const WRAP = {
+  lv: {
+    now: (a) => `지금의 상황을 한마디로 묶으면 ${J.ro(a)} 요약할 수 있어요. 지금 서 있는 자리를 정확히 아는 것이 다음 한 걸음을 정하는 출발점이에요. 좋은 흐름이라면 그 흐름을 지키는 데, 막힌 흐름이라면 무엇이 막고 있는지 알아차리는 데 먼저 마음을 써 보세요.`,
+    them: (a) => `그 사람의 마음을 겉과 속으로 나누어 보면 ${a}의 결이 겹쳐 있어요. 겉으로 보이는 태도만으로 마음을 단정하지 말고, 그 사람이 왜 그렇게 행동할 수밖에 없는지 한 번 더 헤아려 보세요. 상대의 속도와 사정을 이해할 때 오해가 줄어들어요.`,
+    me: (a) => `당신의 마음에는 ${a}의 감정이 함께 흐르고 있어요. 상대의 마음을 읽는 것만큼 내 마음을 정확히 아는 것도 중요해요. 지금 느끼는 감정에 이름을 붙여 주면, 휘둘리지 않고 원하는 방향으로 관계를 이끌 수 있어요.`,
+    want: (a) => `당신이 진짜로 바라는 것은 ${a}에 가까워요. 이 바람을 기준으로 삼으면, 상대의 반응 하나하나에 흔들리기보다 내가 원하는 관계의 모습에 맞춰 행동을 고를 수 있어요.`,
+    next: (a) => `앞으로의 흐름은 ${a}의 순서로 펼쳐질 가능성이 커요. 카드가 보여 주는 미래는 지금의 태도가 그대로 이어졌을 때의 그림이에요. 마음에 들지 않는 부분이 있다면 조언 카드를 따라 지금부터 조금씩 방향을 틀 수 있어요.`,
+    adv: (a) => `조언 카드의 핵심은 ${J.ida(a)} 거창한 결심보다 오늘 바로 할 수 있는 작은 행동 하나가 관계의 흐름을 바꿔요. 이번 주 안에 한 가지만 골라 실천해 보세요.`
+  },
+  cr: {
+    now: (a) => `지금 당신의 진로는 ${a}의 흐름 위에 놓여 있어요. 현재 위치를 정확히 아는 것이 방향을 정하는 첫걸음이에요.`,
+    like: (a) => `당신이 좋아하는 것의 결은 ${a}에 닿아 있어요. 좋아하는 마음은 오래 버티게 하는 연료예요. 이 결을 지금 하는 일 안에 조금이라도 더 들여올 방법을 찾아보세요.`,
+    hard: (a) => `당신을 힘들게 하는 것은 ${J.wa(a)} 연결돼 있어요. 힘든 부분을 억지로 참기보다, 그 일을 덜 하게 되는 구조를 만들거나 도움을 구하는 것도 훌륭한 진로 전략이에요.`,
+    over: (a) => `넘어서야 할 벽은 ${J.ida(a)} 극복은 한 번에 이루어지지 않아요. 아주 작은 단위로 쪼개 매일 한 걸음씩 연습하면 어느새 벽이 낮아져 있을 거예요.`,
+    learn: (a) => `앞으로 배우면 좋은 것은 ${J.wa(a)} 맞닿아 있어요. 강의, 책, 사람, 작은 프로젝트 중 가장 부담 없는 방식으로 이번 달 안에 시작해 보세요.`,
+    solve: (a) => `지금 정리해야 할 문제는 ${J.ida(a)} 미뤄 둔 문제는 시간이 지날수록 무거워지니, 가장 작은 것부터 하나씩 결론을 내려 보세요.`,
+    prep: (a) => `준비해야 할 것은 ${J.ro(a)} 요약돼요. 기회는 준비된 사람에게 기회로 보이기 마련이에요. 목록을 적고 마감일을 정해 두면 준비가 훨씬 구체적이 돼요.`,
+    next: (a) => `앞으로의 흐름은 ${a}의 순서로 펼쳐질 가능성이 커요. 가까운 흐름은 지금의 노력에 대한 반응이고, 먼 흐름은 그 노력이 쌓였을 때의 모습이에요. 원하는 모습이 아니라면 조언 카드를 따라 지금부터 방향을 조금씩 바꿔 보세요.`,
+    adv: (a) => `조언 카드의 핵심은 ${J.ida(a)} 오늘 할 수 있는 가장 작은 행동 하나를 정해서 이번 주 안에 실천해 보세요. 진로는 생각이 아니라 움직임 속에서 선명해져요.`
+  },
+  ch: {
+    now: (a) => `이 길 앞의 지금 상황은 ${J.ro(a)} 읽혀요.`,
+    why: (a) => `이런 상황이 된 데에는 ${a}의 이유가 겹쳐 있어요. 겉으로 드러난 이유와 마음속 이유가 같은지 다른지 살펴보면, 이 선택이 정말 필요한 것인지 더 분명해져요.`,
+    want: (a) => `이 길에서 당신이 바라는 것은 ${J.ida(a)} 이 선택이 그 바람을 실제로 채워 줄 수 있는지, 다른 방법으로도 채울 수 있는지 함께 따져 보세요.`,
+    how: (a) => `이 길에서 문제를 푸는 열쇠는 ${J.ida(a)} 혼자 다 해결하려 하기보다 도움이 되는 사람과 자원을 적극적으로 활용하세요.`,
+    next: (a) => `이 길의 흐름은 ${a}의 순서로 펼쳐질 가능성이 커요. 시작, 전개, 결과 중 어느 지점이 가장 마음에 걸리는지 살펴보면 대비할 부분이 보여요.`,
+    adv: (a) => `이 길에 대한 조언의 핵심은 ${J.ida(a)}`
+  }
+};
+function hasB(str) {
+  const m = String(str).replace(/[^가-힣0-9]+$/g, "");
+  const ch = m[m.length - 1] || "";
+  if (/[0-9]/.test(ch)) return "013678".includes(ch);
+  const code = ch.charCodeAt(0) - 0xAC00;
+  return code >= 0 && code % 28 !== 0;
+}
+function hasRieul(str) { const m = String(str).replace(/[^가-힣0-9]+$/g, ""); const ch = m[m.length - 1] || ""; if (/[0-9]/.test(ch)) return "178".includes(ch); return (ch.charCodeAt(0) - 0xAC00) % 28 === 8; }
+const J = {
+  ida: w => w + (hasB(w) ? "이에요" : "예요"),
+  ro: w => w + (hasB(w) && !hasRieul(w) ? "으로" : "로"),
+  wa: w => w + (hasB(w) ? "과" : "와"),
+  ga: w => w + (hasB(w) ? "이" : "가"),
+  reul: w => w + (hasB(w) ? "을" : "를")
+};
+const joinKw = ds => ds.map(d => `'${kwOf(d)[0] || BY_ID[d.id].ko}'`).join(", 그리고 ");
+
+function score(ds) {
+  const v = ds.reduce((s, d) => s + val(d), 0) / ds.length;
+  return Math.max(5, Math.min(95, Math.round(50 + v * 22)));
+}
+function scoreWord(n) {
+  return n >= 75 ? "밝고 힘 있는 흐름" : n >= 58 ? "좋은 쪽으로 기우는 흐름" : n >= 42 ? "균형 속에 선택이 중요한 흐름" : n >= 28 ? "조율과 인내가 필요한 흐름" : "잠시 멈추고 돌보아야 할 흐름";
+}
+
+function overview(ds, group, label) {
+  const majors = ds.filter(d => suitOf(d.id) === "m").length;
+  const revs = ds.filter(d => d.rev).length;
+  const cnt = { w: 0, c: 0, s: 0, p: 0 };
+  ds.forEach(d => { const s = suitOf(d.id); if (s !== "m") cnt[s]++; });
+  const top = Object.entries(cnt).sort((a, b) => b[1] - a[1])[0];
+  const key = ds[0];
+  const ps = [];
+  ps.push(`당신이 다섯 장 가운데 직접 고른 카드는 ${nameOf(key)} 카드예요. ${kwOf(key).join(", ")}. 이 단어들이 이번 리딩의 바탕색이 됩니다. ${txt(key, "core")}`);
+  ps.push(majors >= 5
+    ? `열한 장 가운데 메이저 아르카나가 ${majors}장이나 나왔어요. 지금 이 문제는 일상의 작은 고민이 아니라 삶의 방향이 바뀌는 큰 전환점에 놓여 있다는 뜻이에요. 개인의 의지를 넘어서는 흐름이 함께 작용하고 있으니, 억지로 결과를 쥐려 하기보다 흐름이 보내는 신호를 잘 읽는 것이 중요해요.`
+    : majors >= 2
+      ? `열한 장 가운데 메이저 아르카나가 ${majors}장 나왔어요. 일상의 흐름 속에 중요한 전환의 계기가 섞여 있다는 뜻이에요. 메이저 카드가 놓인 자리는 특히 마음에 두고 읽어 주세요.`
+      : `열한 장 가운데 메이저 아르카나가 ${majors}장뿐이에요. 지금의 문제는 운명처럼 거대한 흐름이라기보다, 당신의 선택과 행동으로 충분히 바꿀 수 있는 일상의 영역에 있다는 뜻이에요. 그만큼 당신 손에 쥔 힘이 크다는 의미이기도 해요.`);
+  if (top[1] >= 3) ps.push(`네 가지 원소 가운데 ${SUIT_NAME[top[0]]} 카드가 ${top[1]}장으로 가장 많아요. ${SUIT_TXT[top[0]][group]}`);
+  else ps.push(`네 가지 원소가 고르게 섞여 나왔어요. 감정, 생각, 열정, 현실 가운데 어느 하나에 치우치지 않고 여러 측면을 함께 살펴야 하는 상황이에요. 한쪽 면만 보고 결론을 서두르지 않는 것이 좋아요.`);
+  ps.push(revs === 0
+    ? `역방향 카드가 한 장도 없어요. 에너지가 막힘없이 바깥으로 흐르고 있으니, 지금 마음먹은 일을 미루지 않고 실행하기 좋은 때예요.`
+    : revs <= 3
+      ? `역방향 카드는 ${revs}장이에요. 대부분의 흐름은 순조롭지만, 역방향이 놓인 자리는 마음속 망설임이나 막힌 부분을 알려 주니 그 자리를 조금 더 세심하게 읽어 주세요.`
+      : `역방향 카드가 ${revs}장으로 많은 편이에요. 지금은 바깥으로 밀어붙이기보다 안을 들여다보고 정리할 때라는 신호예요. 서두르지 않고 마음을 돌보면 막혔던 흐름이 서서히 풀려요.`);
+  return ps;
+}
+
+function partHTML(t, ds, opt) {
+  const group = t.group;
+  revN = 0;
+  let html = "";
+  t.secs.forEach(([k, title], si) => {
+    const idx = t.pos.map((p, i) => p[0] === k ? i : -1).filter(i => i >= 0);
+    if (!idx.length) return;
+    html += `<div class="part"><div class="part-h"><span>${String(si + 1).padStart(2, "0")}</span><h3>${title}</h3></div>`;
+    if (k === "word") {
+      const d = ds[idx[0]], c = BY_ID[d.id];
+      html += cardBlock(d, idx[0], t.pos[idx[0]], group, false);
+      html += `<div class="motto"><div class="lab">마음에 새길 말</div><blockquote>${esc(txt(d, "word"))}</blockquote>
+        <ul>${ds.slice(0, 10).map(x => `<li>${esc(BY_ID[x.id].ko)} · ${esc(txt(x, "word"))}</li>`).join("")}</ul></div>`;
+      html += `<div class="wrapup"><b>카드가 남긴 문장들</b><p>위의 문장들은 열한 장의 카드가 각자 당신에게 남긴 한마디예요. 가장 마음에 닿는 한 줄을 골라 휴대폰 메모나 잠금화면에 적어 두세요. 마음이 흔들릴 때마다 그 문장을 다시 읽으면, 오늘 이 리딩에서 얻은 중심을 잃지 않을 수 있어요.</p></div>`;
+    } else {
+      idx.forEach(i => { html += cardBlock(ds[i], i, t.pos[i], group, i === 0); });
+      const w = WRAP[group][k];
+      if (w) {
+        let extra = "";
+        if (k === "adv" && group !== "lv") extra = ` ${idx.map(i => txt(ds[i], "word")).filter(Boolean).map(x => `'${x}'`).join(" ")}`;
+        html += `<div class="wrapup"><b>${title} 정리</b><p>${esc(w(joinKw(idx.map(i => ds[i]))) + extra)}</p></div>`;
+      }
+    }
+    html += `</div>`;
+  });
+  return html;
+}
+
+function renderReading() {
+  const t = TOPICS[S.topic];
+  const q = $("#q").value.trim();
+  let html = "";
+  if (S.topic === "choice") {
+    const A = S.spreads.A, B = S.spreads.B;
+    const sa = score(A), sb = score(B);
+    const resA = score(A.slice(7, 10)), resB = score(B.slice(7, 10));
+    const better = Math.abs(sa - sb) < 6 ? null : sa > sb ? "A" : "B";
+    html += `<div class="reading-head"><div class="summary">
+      <h3>두 갈래 길 한눈에 보기</h3>
+      ${q ? `<p>질문: ${esc(q)}</p>` : ""}
+      <div class="gauge">
+        <div class="row"><b>A 흐름</b><div class="track"><div class="fill" style="width:${sa}%"></div></div><span class="n">${sa}</span></div>
+        <div class="row"><b>B 흐름</b><div class="track"><div class="fill" style="width:${sb}%"></div></div><span class="n">${sb}</span></div>
+      </div>
+      <div class="compare">
+        ${["A", "B"].map(k => { const ds = S.spreads[k], sc = k === "A" ? sa : sb, rs = k === "A" ? resA : resB; return `<div class="cmp"><h4>${k} · ${esc(S.labels[k])}</h4>
+          <div class="chips"><span class="chip">열쇠 ${esc(nameOf(ds[0]))}</span><span class="chip">결과 ${esc(nameOf(ds[9]))}</span><span class="chip">조언 ${esc(nameOf(ds[10]))}</span></div>
+          <p>전체 흐름은 ${scoreWord(sc)}, 앞으로의 흐름만 보면 ${scoreWord(rs)}이에요. ${esc(txt(ds[9], "choice"))}</p></div>`; }).join("")}
+      </div>
+      <p>${better
+        ? `카드의 흐름만 놓고 보면 ${better} 쪽 길(${esc(S.labels[better])})이 조금 더 밝게 읽혀요. 하지만 흐름 지수는 카드의 밝고 어두운 기운을 단순하게 더한 참고치예요. 아래의 '원하는 것'과 '조언' 자리를 함께 읽고, 어느 쪽이 당신의 진짜 바람에 더 가까운지 확인한 뒤 결정해 주세요.`
+        : `두 길의 흐름 지수가 비슷하게 나왔어요. 어느 쪽을 택해도 큰 차이보다는 '어떻게 걸어가느냐'가 결과를 좌우한다는 뜻이에요. 이럴 때는 각 길의 '원하는 것'과 '해결 방법' 자리를 비교해, 더 기꺼이 감당할 수 있는 쪽을 고르는 것이 좋아요.`}</p>
+    </div>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" data-p="A" aria-selected="true">A · ${esc(S.labels.A)}</button>
+      <button class="tab" role="tab" data-p="B" aria-selected="false">B · ${esc(S.labels.B)}</button>
+    </div></div>`;
+    ["A", "B"].forEach(k => {
+      const ds = S.spreads[k];
+      html += `<div class="panel-${k}" data-panel="${k}" ${k === "B" ? "hidden" : ""}>
+        <div class="summary" style="margin-top:18px"><h3>${k} · ${esc(S.labels[k])} 전체 흐름</h3>${overview(ds, "ch").map(p => `<p>${esc(p)}</p>`).join("")}</div>
+        ${partHTML(t, ds)}
+      </div>`;
+    });
+    html += `<div class="wrapup" style="margin-top:28px"><b>두 길을 함께 보는 마지막 조언</b><p>${esc(`A 길의 조언 카드는 ${nameOf(A[10])} 카드, B 길의 조언 카드는 ${nameOf(B[10])} 카드예요. A를 택한다면 ${J.reul(`'${kwOf(A[10])[0] || ""}'`)} 잊지 말고, B를 택한다면 ${J.reul(`'${kwOf(B[10])[0] || ""}'`)} 붙잡아 주세요. 어느 길이든 완벽한 정답은 없어요. 고른 길을 정답으로 만들어 가는 힘은 결국 당신에게 있어요. 결정을 내리기 전 하루쯤 두 길을 각각 택했다고 상상하며 지내 보세요. 몸과 마음이 더 편안했던 쪽이 지금의 당신에게 맞는 길일 가능성이 커요.`)}</p></div>`;
+  } else {
+    const ds = S.spreads.main;
+    const sc = score(ds);
+    const gaugeLabel = t.group === "cr" ? "진로 흐름" : S.topic === "reunion" ? "재회 흐름" : "관계 온도";
+    html += `<div class="reading-head"><div class="summary">
+      <h3>${t.name} 전체 흐름</h3>
+      ${q ? `<p>질문: ${esc(q)}</p>` : ""}
+      <div class="gauge"><div class="row"><b>${gaugeLabel}</b><div class="track"><div class="fill" style="width:${sc}%"></div></div><span class="n">${sc}</span></div></div>
+      <p>열한 장의 기운을 모아 보면 지금은 <b>${scoreWord(sc)}</b>이에요. 이 지수는 카드의 밝고 어두운 기운을 더한 참고치이니, 숫자보다 아래 풀이의 흐름을 중심으로 읽어 주세요.</p>
+      ${overview(ds, t.group).map(p => `<p>${esc(p)}</p>`).join("")}
+    </div></div>`;
+    html += partHTML(t, ds);
+  }
+  $("#reading").innerHTML = html;
+  $("#read-sub").textContent = S.topic === "choice"
+    ? `A와 B 각각 열한 장을 현재 상황, 이런 상황이 된 이유, 원하는 것, 해결 방법, 앞으로의 흐름, 조언 순서로 풀었어요.`
+    : `열한 장을 ${t.secs.map(s => s[1]).join(", ")} 순서로 풀었어요.`;
+  $("#sec-read").hidden = false;
+  document.querySelectorAll(".tab").forEach(b => b.addEventListener("click", () => {
+    document.querySelectorAll(".tab").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+    document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== b.dataset.p);
+  }));
+  const len = $("#reading").textContent.replace(/\s+/g, " ").trim().length;
+  $("#count").textContent = S.topic === "choice" ? "" : `풀이 분량 약 ${len.toLocaleString()}자`;
+}
+
+/* ---------- 이벤트 ---------- */
+renderTopics();
+$("#go").addEventListener("click", startDraw);
+$("#reshuffle").addEventListener("click", () => {
+  S.deck = shuffle(); S.spreads = {}; S.phase = S.topic === "choice" ? "A" : "main";
+  layFan(); layFive();
+});
+$("#five").addEventListener("click", e => {
+  const b = e.target.closest(".pick"); if (!b || b.disabled) return;
+  choose(+b.dataset.i);
+});
+$("#again").addEventListener("click", () => {
+  ["#sec-draw", "#sec-spread", "#sec-read"].forEach(s => $(s).hidden = true);
+  $("#sec-topic").scrollIntoView();
+});
+$("#copy").addEventListener("click", async () => {
+  const t = TOPICS[S.topic];
+  let out = `[${t.name}] Light the Way 11장 타로\n`;
+  const q = $("#q").value.trim(); if (q) out += `질문: ${q}\n`;
+  document.querySelectorAll("[data-panel]").forEach(p => p.hidden = false);
+  out += "\n" + $("#reading").innerText;
+  document.querySelectorAll("[data-panel]").forEach(p => p.hidden = p.dataset.panel !== (document.querySelector('.tab[aria-selected="true"]')?.dataset.p || "A"));
+  try { await navigator.clipboard.writeText(out); $("#toast").textContent = "풀이 전체를 복사했어요."; }
+  catch { $("#toast").textContent = "복사가 막혀 있어요. 화면을 길게 눌러 직접 선택해 주세요."; }
+});
+</script>
+</body>
+</html>
