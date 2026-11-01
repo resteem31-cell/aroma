@@ -104,6 +104,12 @@ section { display: grid; gap: 20px; scroll-margin-top: 16px; }
 .topic img { width: 54px; border-radius: 5px; display: block; }
 .topic b { display: block; font-family: var(--display); font-size: 18px; line-height: 1.3; }
 .topic span { display: block; font-size: 13px; color: var(--muted); line-height: 1.45; margin-top: 2px; }
+.topic .price { display: inline-block; margin-top: 6px; font-size: 13px; font-weight: 600; color: var(--accent); font-variant-numeric: tabular-nums; }
+.account { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; justify-content: space-between; padding: 12px 16px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); font-size: 14px; }
+.account b { font-family: var(--display); font-size: 15px; }
+.btn.kakao { background: #FEE500; border-color: #FEE500; color: #191600; font-weight: 600; }
+.btn.small { min-height: 36px; padding: 0 14px; font-size: 13px; }
+.notice { padding: 12px 16px; border-radius: var(--radius); background: var(--accent-soft); font-size: 15px; }
 .ask { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px 18px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
 .ask .full { grid-column: 1 / -1; }
 .field { display: grid; gap: 6px; min-width: 0; }
@@ -241,6 +247,8 @@ footer a { color: inherit; }
       <h2 id="h-topic">무엇이 궁금한가요?</h2>
       <p>지금 가장 마음이 쓰이는 주제 하나를 고르세요. 주제에 따라 열한 장이 놓이는 자리와 풀이 방식이 달라집니다.</p>
     </div>
+    <div class="account" id="account" hidden></div>
+    <p class="notice" id="notice" role="status" hidden></p>
     <div class="topics" id="topics"></div>
     <div class="ask" id="ask" hidden>
       <div class="field full" id="f-q">
@@ -499,13 +507,13 @@ function shuffle() {
 function renderTopics() {
   $("#topics").innerHTML = TOPIC_ORDER.map(k => {
     const t = TOPICS[k];
-    return `<button class="topic" type="button" data-k="${k}" aria-pressed="false"><img src="${IMG(t.art)}" alt=""><div><b>${t.name}</b><span>${t.desc}</span></div></button>`;
+    return `<button class="topic" type="button" data-k="${k}" aria-pressed="false"><img src="${IMG(t.art)}" alt=""><div><b>${t.name}</b><span>${t.desc}</span>${PAY.on ? `<span class="price">${won(PAY.prices[k].amount)}</span>` : ""}</div></button>`;
   }).join("");
-  $("#topics").addEventListener("click", e => {
-    const b = e.target.closest(".topic"); if (!b) return;
-    selectTopic(b.dataset.k);
-  });
 }
+$("#topics").addEventListener("click", e => {
+  const b = e.target.closest(".topic"); if (!b) return;
+  selectTopic(b.dataset.k);
+});
 function selectTopic(k) {
   S.topic = k;
   document.querySelectorAll(".topic").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === k)));
@@ -518,6 +526,7 @@ function selectTopic(k) {
     ? "두 갈래 길을 A와 B로 적어 주세요. A를 위한 다섯 장에서 한 장, B를 위한 다섯 장에서 한 장을 고르면 각각 열한 장씩 펼쳐집니다."
     : "질문을 적지 않아도 괜찮아요. 카드를 뽑는 동안 마음속으로 질문을 한 번 떠올려 주세요.";
   $("#warn").textContent = "";
+  $("#go").textContent = PAY.on ? (PAY.user ? `${won(PAY.prices[k].amount)} 결제하고 카드 펼치기` : "카카오로 로그인하고 결제하기") : "카드 섞고 펼치기";
   ["#sec-draw", "#sec-spread", "#sec-read"].forEach(s => $(s).hidden = true);
 }
 
@@ -530,6 +539,7 @@ function startDraw() {
     S.labels = { A: a, B: b };
   }
   $("#warn").textContent = "";
+  if (PAY.on && (!S.order || S.orderTopic !== S.topic)) { S.order = null; payStart(); return; }
   S.deck = shuffle(); S.picks = {}; S.spreads = {};
   S.phase = S.topic === "choice" ? "A" : "main";
   ["#sec-spread", "#sec-read"].forEach(s => $(s).hidden = true);
@@ -586,6 +596,7 @@ function choose(i) {
       return;
     }
     $("#draw-sub").textContent = "78장의 카드를 섞어 펼쳤어요. 그중 다섯 장을 앞으로 꺼내 두었습니다. 질문을 떠올리며 마음이 가는 한 장을 누르면, 그 카드에 이어진 열한 장이 자동으로 놓입니다.";
+    if (PAY.on && S.order) { saveSpreads().then(showSpreads); return; }
     showSpreads();
   }, 1300);
 }
@@ -812,8 +823,91 @@ function renderReading() {
   $("#count").textContent = S.topic === "choice" ? "" : `풀이 분량 약 ${len.toLocaleString()}자`;
 }
 
+/* ---------- 결제 (카카오 로그인 + 카카오페이) ----------
+   /api 가 있는 곳(Cloudflare Pages)에서만 켜집니다. GitHub Pages 같은 정적 호스팅에서는 무료로 동작합니다. */
+const PAY = { on: false, user: null, prices: {}, test: false };
+const won = n => `${n.toLocaleString()}원`;
+const store = {
+  get(k) { try { return JSON.parse(sessionStorage.getItem(k)); } catch { return null; } },
+  set(k, v) { try { sessionStorage.setItem(k, JSON.stringify(v)); } catch {} },
+  del(k) { try { sessionStorage.removeItem(k); } catch {} }
+};
+function formState() { return { topic: S.topic, q: $("#q").value.trim(), A: $("#optA").value.trim(), B: $("#optB").value.trim() }; }
+function fillForm(f) {
+  if (!f || !TOPICS[f.topic]) return;
+  selectTopic(f.topic);
+  $("#q").value = f.q || "";
+  $("#optA").value = f.A || f.labels?.A || ""; $("#optB").value = f.B || f.labels?.B || "";
+}
+function notice(msg) { $("#notice").textContent = msg; $("#notice").hidden = !msg; }
+function renderAccount() {
+  const el = $("#account");
+  el.hidden = !PAY.on;
+  if (!PAY.on) return;
+  el.innerHTML = PAY.user
+    ? `<span><b>${esc(PAY.user.nickname)}</b>님, 반가워요.${PAY.test ? " (테스트 결제 모드)" : ""}</span><a class="btn small" href="/api/auth/logout">로그아웃</a>`
+    : `<span>카카오 계정으로 가입하고, 볼 때마다 결제해요.${PAY.test ? " (테스트 결제 모드)" : ""}</span><a class="btn kakao small" href="/api/auth/login">카카오로 시작하기</a>`;
+}
+async function api(path, opts) {
+  const r = await fetch(path, { credentials: "same-origin", ...opts, headers: { "Content-Type": "application/json", ...(opts && opts.headers) } });
+  let data = null; try { data = await r.json(); } catch {}
+  return { ok: r.ok, status: r.status, data };
+}
+async function payStart() {
+  if (!PAY.user) { store.set("tarot-form", formState()); location.href = "/api/auth/login"; return; }
+  $("#go").disabled = true;
+  const f = formState();
+  const r = await api("/api/pay/ready", { method: "POST", body: JSON.stringify(f) });
+  $("#go").disabled = false;
+  if (r.status === 401) { PAY.user = null; renderAccount(); store.set("tarot-form", f); location.href = "/api/auth/login"; return; }
+  if (!r.ok) { $("#warn").textContent = "결제 화면을 열지 못했어요. 잠시 뒤 다시 시도해 주세요."; return; }
+  const mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+  location.href = (mobile && r.data.mobile) || r.data.pc;
+}
+async function saveSpreads() {
+  const r = await api(`/api/order/${S.order}`, { method: "POST", body: JSON.stringify({ spreads: S.spreads }) });
+  if (r.status === 409 && r.data && r.data.spreads) S.spreads = r.data.spreads;
+}
+async function openOrder(id) {
+  const r = await api(`/api/order/${encodeURIComponent(id)}`);
+  if (r.status === 401) { notice("결제 내역을 보려면 결제한 카카오 계정으로 로그인해 주세요."); return; }
+  if (!r.ok) { notice("결제 내역을 찾지 못했어요."); return; }
+  const o = r.data;
+  fillForm(o);
+  if (o.labels) S.labels = o.labels;
+  S.order = o.id; S.orderTopic = o.topic;
+  if (o.status === "used" && o.spreads) {
+    notice(`${TOPICS[o.topic].name} 결제 내역의 풀이를 다시 열었어요. 이 주소를 저장해 두면 언제든 다시 볼 수 있어요.`);
+    S.spreads = o.spreads;
+    showSpreads();
+  } else if (o.status === "paid") {
+    notice(`${won(o.amount)} 결제가 완료됐어요. 이제 카드를 뽑아 주세요.`);
+    startDraw();
+  } else {
+    notice("아직 결제가 끝나지 않은 주문이에요.");
+  }
+}
+async function initPay() {
+  const params = new URLSearchParams(location.search);
+  if (/^https?:$/.test(location.protocol)) {
+    try {
+      const r = await api("/api/me");
+      if (r.ok && r.data && r.data.prices) Object.assign(PAY, { on: true, user: r.data.user, prices: r.data.prices, test: r.data.test });
+    } catch {}
+  }
+  renderTopics();
+  renderAccount();
+  if (!PAY.on) return;
+  if (params.get("pay") === "cancel") notice("결제를 취소했어요. 원할 때 다시 시도해 주세요.");
+  if (params.get("pay") === "fail") notice("결제가 완료되지 않았어요. 다시 시도해 주세요.");
+  if (params.get("login") === "fail") notice("카카오 로그인이 완료되지 않았어요. 다시 시도해 주세요.");
+  const saved = store.get("tarot-form");
+  if (saved && PAY.user && !params.get("order")) { fillForm(saved); store.del("tarot-form"); $("#sec-topic").scrollIntoView(); }
+  if (params.get("order")) openOrder(params.get("order"));
+}
+
 /* ---------- 이벤트 ---------- */
-renderTopics();
+initPay();
 $("#go").addEventListener("click", startDraw);
 $("#reshuffle").addEventListener("click", () => {
   S.deck = shuffle(); S.spreads = {}; S.phase = S.topic === "choice" ? "A" : "main";
@@ -824,6 +918,7 @@ $("#five").addEventListener("click", e => {
   choose(+b.dataset.i);
 });
 $("#again").addEventListener("click", () => {
+  if (S.order) { S.order = null; notice(""); history.replaceState(null, "", location.pathname); }
   ["#sec-draw", "#sec-spread", "#sec-read"].forEach(s => $(s).hidden = true);
   $("#sec-topic").scrollIntoView();
 });
