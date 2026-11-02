@@ -212,6 +212,22 @@ section { display: grid; gap: 20px; scroll-margin-top: 16px; }
 .cmp h4 { font-size: 18px; }
 .cmp p { font-size: 15px; }
 .meta { font-size: 13px; color: var(--muted); text-align: right; }
+.lucky { display: grid; gap: 18px; padding: 28px 0 8px; border-top: 1px solid var(--line); margin-top: 18px; }
+.three { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(10px, 3vw, 22px); max-width: 420px; width: 100%; margin: 0 auto; }
+.lucky-card { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 20px; align-items: center; padding: 20px; border-radius: var(--radius); background: linear-gradient(160deg, var(--back-2), var(--back)); color: #F3EBDA; }
+.lucky-card img { width: 150px; border-radius: 8px; display: block; box-shadow: 0 0 0 2px var(--gold); }
+.lucky-card .lab { font-size: 13px; letter-spacing: .14em; color: var(--gold); font-weight: 600; }
+.lucky-card h3 { font-size: 24px; margin: 4px 0 8px; }
+.lucky-card p { font-size: 15px; color: #DDD3C2; }
+.lucky-card blockquote { margin: 10px 0 14px; font-family: var(--display); font-size: 19px; line-height: 1.5; }
+.lucky-card .btn { background: transparent; color: #F3EBDA; border-color: color-mix(in srgb, var(--gold) 70%, transparent); }
+@media (max-width: 520px) { .lucky-card { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+.sheet { position: fixed; inset: 0; z-index: 20; background: rgba(10, 10, 20, .72); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.sheet-box { background: var(--surface); border-radius: 14px; padding: 18px; width: min(520px, 100%); max-height: calc(100vh - 32px); max-height: calc(100dvh - 32px); display: grid; grid-template-rows: auto auto minmax(0, 1fr) auto; gap: 10px; }
+.sheet-box h3 { font-size: 19px; }
+.sheet-tip { font-size: 14px; color: var(--muted); }
+.sheet-img { overflow: auto; min-height: 0; border-radius: 8px; background: var(--bg); }
+.sheet-img img { display: block; width: 100%; height: auto; }
 .closing { text-align: center; display: grid; gap: 14px; justify-items: center; padding: 8px 0; }
 .closing p { font-family: var(--display); font-size: 19px; max-width: 30em; }
 .toast { font-size: 14px; color: var(--accent); min-height: 1.4em; }
@@ -302,15 +318,49 @@ footer a { color: inherit; }
     </div>
     <div id="reading"></div>
     <p class="meta" id="count"></p>
+    <div class="lucky" id="lucky">
+      <div class="sec-head">
+        <div class="sec-num">선물</div>
+        <h2>행운의 카드 한 장</h2>
+        <p id="lucky-sub">풀이를 끝까지 읽어 주셔서 고마워요. 오늘의 행운을 담은 카드 한 장을 선물로 드릴게요. 세 장 가운데 마음이 가는 카드를 골라 주세요.</p>
+      </div>
+      <div class="three" id="three"></div>
+      <div class="lucky-card" id="lucky-card" hidden></div>
+    </div>
     <div class="closing">
       <p>카드는 정해진 운명이 아니라 지금의 흐름을 비추는 거울이에요. 오늘 읽은 문장 중 한 줄만 붙잡고 움직여 보세요.</p>
       <div class="btns" style="justify-content:center">
-        <button class="btn primary" id="copy" type="button">풀이 전체 복사</button>
+        <button class="btn primary" id="save-img" type="button">결과 이미지로 저장</button>
+        <button class="btn" id="share" type="button">공유하기</button>
+        <button class="btn" id="copy" type="button">풀이 전체 복사</button>
         <button class="btn" id="again" type="button">다른 주제로 다시 보기</button>
       </div>
       <div class="toast" id="toast" role="status"></div>
     </div>
   </section>
+
+  <div class="sheet" id="paydemo" hidden role="dialog" aria-modal="true" aria-labelledby="pd-title">
+    <div class="sheet-box" style="grid-template-rows:auto">
+      <div style="display:grid;gap:12px;text-align:center">
+        <div style="font-weight:700;background:#FEE500;color:#191600;border-radius:8px;padding:8px">kakao pay · 체험 화면</div>
+        <h3 id="pd-title"></h3>
+        <p class="sheet-tip">체험 모드라서 실제로 결제되지 않아요. 실제 사이트에서는 이 자리에서 카카오페이 결제 화면이 열려요.</p>
+        <div class="btns" style="justify-content:center"><button class="btn primary" id="pd-ok" type="button">결제하기</button><button class="btn" id="pd-cancel" type="button">취소</button></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sheet" id="sheet" hidden role="dialog" aria-modal="true" aria-labelledby="sheet-title">
+    <div class="sheet-box">
+      <h3 id="sheet-title">이미지가 만들어졌어요</h3>
+      <p class="sheet-tip" id="sheet-tip">휴대폰에서는 이미지를 길게 눌러 '사진에 저장'을 고르면 앨범에 저장돼요.</p>
+      <div class="sheet-img"><img id="sheet-img" alt="저장할 결과 이미지"></div>
+      <div class="btns" style="justify-content:center">
+        <button class="btn primary" id="sheet-save" type="button">저장하기</button>
+        <button class="btn" id="sheet-close" type="button">닫기</button>
+      </div>
+    </div>
+  </div>
 
   <footer>
     카드 그림: 라이더-웨이트 타로 (Pamela Colman Smith, 1909, 퍼블릭 도메인)<br>
@@ -540,7 +590,7 @@ function startDraw() {
   }
   $("#warn").textContent = "";
   if (PAY.on && (!S.order || S.orderTopic !== S.topic)) { S.order = null; payStart(); return; }
-  S.deck = shuffle(); S.picks = {}; S.spreads = {};
+  S.deck = shuffle(); S.picks = {}; S.spreads = {}; S.lucky = null;
   S.phase = S.topic === "choice" ? "A" : "main";
   ["#sec-spread", "#sec-read"].forEach(s => $(s).hidden = true);
   $("#spreads").innerHTML = ""; $("#reading").innerHTML = "";
@@ -732,7 +782,7 @@ function overview(ds, group, label) {
   return ps;
 }
 
-function partHTML(t, ds, opt) {
+function partHTML(t, ds, summ) {
   const group = t.group;
   revN = 0;
   let html = "";
@@ -745,6 +795,7 @@ function partHTML(t, ds, opt) {
       html += cardBlock(d, idx[0], t.pos[idx[0]], group, false);
       html += `<div class="motto"><div class="lab">마음에 새길 말</div><blockquote>${esc(txt(d, "word"))}</blockquote>
         <ul>${ds.slice(0, 10).map(x => `<li>${esc(BY_ID[x.id].ko)} · ${esc(txt(x, "word"))}</li>`).join("")}</ul></div>`;
+      if (summ) summ.push({ title: "새길 말", text: txt(d, "word"), quote: true });
       html += `<div class="wrapup"><b>카드가 남긴 문장들</b><p>위의 문장들은 열한 장의 카드가 각자 당신에게 남긴 한마디예요. 가장 마음에 닿는 한 줄을 골라 휴대폰 메모나 잠금화면에 적어 두세요. 마음이 흔들릴 때마다 그 문장을 다시 읽으면, 오늘 이 리딩에서 얻은 중심을 잃지 않을 수 있어요.</p></div>`;
     } else {
       idx.forEach(i => { html += cardBlock(ds[i], i, t.pos[i], group, i === 0); });
@@ -752,7 +803,9 @@ function partHTML(t, ds, opt) {
       if (w) {
         let extra = "";
         if (k === "adv" && group !== "lv") extra = ` ${idx.map(i => txt(ds[i], "word")).filter(Boolean).map(x => `'${x}'`).join(" ")}`;
-        html += `<div class="wrapup"><b>${title} 정리</b><p>${esc(w(joinKw(idx.map(i => ds[i]))) + extra)}</p></div>`;
+        const sumText = w(joinKw(idx.map(i => ds[i]))) + extra;
+        if (summ) summ.push({ title, text: sumText });
+        html += `<div class="wrapup"><b>${title} 정리</b><p>${esc(sumText)}</p></div>`;
       }
     }
     html += `</div>`;
@@ -762,6 +815,7 @@ function partHTML(t, ds, opt) {
 
 function renderReading() {
   const t = TOPICS[S.topic];
+  S.summary = {}; S.flow = ""; S.compare = "";
   const q = $("#q").value.trim();
   let html = "";
   if (S.topic === "choice") {
@@ -769,6 +823,8 @@ function renderReading() {
     const sa = score(A), sb = score(B);
     const resA = score(A.slice(7, 10)), resB = score(B.slice(7, 10));
     const better = Math.abs(sa - sb) < 6 ? null : sa > sb ? "A" : "B";
+    S.flow = `A 흐름 ${sa} · B 흐름 ${sb}`;
+    S.compare = better ? `카드의 흐름으로는 ${better} 쪽 길(${S.labels[better]})이 조금 더 밝게 읽혀요.` : "두 길의 흐름이 비슷해요. 어떻게 걸어가느냐가 결과를 좌우해요.";
     html += `<div class="reading-head"><div class="summary">
       <h3>두 갈래 길 한눈에 보기</h3>
       ${q ? `<p>질문: ${esc(q)}</p>` : ""}
@@ -793,7 +849,7 @@ function renderReading() {
       const ds = S.spreads[k];
       html += `<div class="panel-${k}" data-panel="${k}" ${k === "B" ? "hidden" : ""}>
         <div class="summary" style="margin-top:18px"><h3>${k} · ${esc(S.labels[k])} 전체 흐름</h3>${overview(ds, "ch").map(p => `<p>${esc(p)}</p>`).join("")}</div>
-        ${partHTML(t, ds)}
+        ${partHTML(t, ds, (S.summary[k] = []))}
       </div>`;
     });
     html += `<div class="wrapup" style="margin-top:28px"><b>두 길을 함께 보는 마지막 조언</b><p>${esc(`A 길의 조언 카드는 ${nameOf(A[10])} 카드, B 길의 조언 카드는 ${nameOf(B[10])} 카드예요. A를 택한다면 ${J.reul(`'${kwOf(A[10])[0] || ""}'`)} 잊지 말고, B를 택한다면 ${J.reul(`'${kwOf(B[10])[0] || ""}'`)} 붙잡아 주세요. 어느 길이든 완벽한 정답은 없어요. 고른 길을 정답으로 만들어 가는 힘은 결국 당신에게 있어요. 결정을 내리기 전 하루쯤 두 길을 각각 택했다고 상상하며 지내 보세요. 몸과 마음이 더 편안했던 쪽이 지금의 당신에게 맞는 길일 가능성이 커요.`)}</p></div>`;
@@ -808,7 +864,8 @@ function renderReading() {
       <p>열한 장의 기운을 모아 보면 지금은 <b>${scoreWord(sc)}</b>이에요. 이 지수는 카드의 밝고 어두운 기운을 더한 참고치이니, 숫자보다 아래 풀이의 흐름을 중심으로 읽어 주세요.</p>
       ${overview(ds, t.group).map(p => `<p>${esc(p)}</p>`).join("")}
     </div></div>`;
-    html += partHTML(t, ds);
+    html += partHTML(t, ds, (S.summary.main = []));
+    S.flow = `${gaugeLabel} ${sc} · ${scoreWord(sc)}`;
   }
   $("#reading").innerHTML = html;
   $("#read-sub").textContent = S.topic === "choice"
@@ -821,7 +878,211 @@ function renderReading() {
   }));
   const len = $("#reading").textContent.replace(/\s+/g, " ").trim().length;
   $("#count").textContent = S.topic === "choice" ? "" : `풀이 분량 약 ${len.toLocaleString()}자`;
+  showLucky();
 }
+
+/* ---------- 행운의 카드 ---------- */
+function showLucky() {
+  $("#lucky-card").hidden = true;
+  if (S.lucky) { revealLucky(S.lucky, false); return; }
+  const used = new Set(Object.values(S.spreads).flat().map(d => d.id));
+  // 행운의 카드는 밝은 기운의 카드(흐름 지수 1 이상) 가운데서만 나옵니다.
+  const pool = CARDS.map(c => c.id).filter(id => !used.has(id) && val({ id, rev: false }) >= 1);
+  S.luckyPool = [0, 1, 2].map(() => pool.splice(rnd(pool.length), 1)[0]);
+  $("#three").hidden = false;
+  $("#lucky-sub").hidden = false;
+  $("#three").innerHTML = S.luckyPool.map((id, i) =>
+    `<button class="pick flip in" type="button" data-i="${i}" aria-label="행운의 카드 ${i + 1}번 고르기"><div class="inner"><div class="back"><span>✦</span></div><div class="front"></div></div></button>`).join("");
+}
+function luckyText(id) {
+  const c = BY_ID[id];
+  return { kw: c.kw.slice(0, 3), word: c.up.word, advice: c.up.advice };
+}
+function revealLucky(id, save) {
+  S.lucky = id;
+  const c = BY_ID[id], L = luckyText(id);
+  $("#three").hidden = true;
+  $("#lucky-sub").hidden = true;
+  const el = $("#lucky-card");
+  el.innerHTML = `<img src="${IMG(id)}" alt="${esc(c.ko)}">
+    <div><div class="lab">오늘의 행운 카드</div><h3>${esc(c.ko)} <small style="font-family:var(--body);font-size:13px;font-style:italic;font-weight:400;color:#BFB7CF">${esc(c.en)}</small></h3>
+    <p>행운의 키워드 · ${L.kw.map(esc).join(", ")}</p>
+    <blockquote>${esc(L.word)}</blockquote>
+    <p>${esc(L.advice)}</p>
+    <div class="btns" style="margin-top:14px"><button class="btn" id="lucky-save" type="button">행운의 카드 이미지로 받기</button></div></div>`;
+  el.hidden = false;
+  $("#lucky-save").addEventListener("click", () => makeImage("lucky"));
+  if (save && PAY.on && !PAY.demo && S.order) api(`/api/order/${S.order}`, { method: "POST", body: JSON.stringify({ lucky: id }) });
+}
+$("#three").addEventListener("click", e => {
+  const b = e.target.closest(".pick"); if (!b || b.disabled) return;
+  const i = +b.dataset.i, id = S.luckyPool[i];
+  [...$("#three").children].forEach((x, k) => { x.disabled = true; if (k !== i) x.classList.add("dim"); });
+  b.querySelector(".front").innerHTML = `<img class="art" src="${IMG(id)}" alt="">`;
+  b.classList.add("open", "chosen");
+  setTimeout(() => revealLucky(id, true), 1100);
+});
+
+/* ---------- 결과 이미지 (캔버스) ---------- */
+const IMGC = { bg1: "#2A2F5E", bg2: "#14162E", gold: "#D2B06A", ink: "#F3EBDA", muted: "#BFB7CF", line: "rgba(210,176,106,.35)" };
+const FONT_D = '"Hahmlet", "Nanum Myeongjo", serif', FONT_B = '"IBM Plex Sans KR", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif';
+const loadImage = src => new Promise((ok, no) => { const im = new Image(); im.onload = () => ok(im); im.onerror = no; im.src = src; });
+function wrapLines(ctx, text, maxW) {
+  const out = [];
+  String(text).split("\n").forEach(para => {
+    let line = "";
+    for (const tok of para.split(/(\s+)/)) {
+      if (!tok) continue;
+      const test = line + tok;
+      if (ctx.measureText(test).width <= maxW || !line.trim()) {
+        if (ctx.measureText(test).width > maxW) {
+          for (const ch of tok) { if (ctx.measureText(line + ch).width > maxW) { out.push(line); line = ch; } else line += ch; }
+        } else line = test;
+      } else { out.push(line.trimEnd()); line = tok.trimStart(); }
+    }
+    out.push(line);
+  });
+  return out;
+}
+function text(ctx, str, x, y, { font, color = IMGC.ink, maxW = 920, lh = 1.6, align = "left" }) {
+  ctx.font = font; ctx.fillStyle = color; ctx.textAlign = align; ctx.textBaseline = "top";
+  const size = parseInt(font.match(/(\d+)px/)[1], 10);
+  const lines = wrapLines(ctx, str, maxW);
+  lines.forEach((l, i) => ctx.fillText(l, x, y + i * size * lh));
+  return y + lines.length * size * lh;
+}
+function roundRect(ctx, x, y, w, h, r) { ctx.beginPath(); ctx.roundRect ? ctx.roundRect(x, y, w, h, r) : ctx.rect(x, y, w, h); }
+async function drawCard(ctx, id, rev, x, y, w) {
+  const h = w * 527 / 300;
+  const im = await loadImage(IMG(id));
+  ctx.save(); roundRect(ctx, x, y, w, h, w * 0.05); ctx.clip();
+  if (rev) { ctx.translate(x + w / 2, y + h / 2); ctx.rotate(Math.PI); ctx.drawImage(im, -w / 2, -h / 2, w, h); }
+  else ctx.drawImage(im, x, y, w, h);
+  ctx.restore();
+  return h;
+}
+function paintBg(ctx, W, H) {
+  const g = ctx.createLinearGradient(0, 0, 0, H); g.addColorStop(0, IMGC.bg1); g.addColorStop(1, IMGC.bg2);
+  ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = IMGC.line; ctx.lineWidth = 2; ctx.strokeRect(24, 24, W - 48, H - 48);
+}
+const today = () => { const d = new Date(); return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`; };
+const siteURL = () => location.origin + location.pathname;
+
+async function drawSpread(ctx, ds, keyLabel, y, W) {
+  const t = TOPICS[S.topic];
+  if (keyLabel) { y = text(ctx, keyLabel, 80, y, { font: `700 38px ${FONT_D}`, color: IMGC.gold }) + 16; }
+  const cols = 6, gap = 18, cw = (W - 160 - gap * (cols - 1)) / cols, ch = cw * 527 / 300;
+  for (let i = 0; i < ds.length; i++) {
+    const r = Math.floor(i / cols), c = i % cols;
+    const rowCount = r === 0 ? cols : ds.length - cols;
+    const offset = r === 0 ? 0 : (cols - rowCount) * (cw + gap) / 2;
+    const x = 80 + offset + c * (cw + gap), yy = y + r * (ch + 92);
+    ctx.font = `700 22px ${FONT_D}`; ctx.fillStyle = IMGC.gold; ctx.textAlign = "center"; ctx.textBaseline = "top";
+    ctx.fillText(`${i + 1} ${t.pos[i][1]}`, x + cw / 2, yy);
+    await drawCard(ctx, ds[i].id, ds[i].rev, x, yy + 32, cw);
+    ctx.font = `500 19px ${FONT_B}`; ctx.fillStyle = IMGC.ink;
+    ctx.fillText(BY_ID[ds[i].id].ko + (ds[i].rev ? " (역)" : ""), x + cw / 2, yy + 40 + ch);
+  }
+  return y + 2 * (ch + 92) + 10;
+}
+function drawSummary(ctx, list, y) {
+  for (const it of list) {
+    y = text(ctx, it.title, 80, y, { font: `700 30px ${FONT_D}`, color: IMGC.gold }) + 6;
+    y = text(ctx, it.quote ? `“${it.text}”` : it.text, 80, y, { font: it.quote ? `600 30px ${FONT_D}` : `400 25px ${FONT_B}`, color: IMGC.ink, lh: 1.65 }) + 30;
+  }
+  return y;
+}
+async function makeImage(kind) {
+  try { await Promise.all([`700 40px Hahmlet`, `600 30px Hahmlet`, `400 25px "IBM Plex Sans KR"`, `500 19px "IBM Plex Sans KR"`].map(f => document.fonts.load(f))); } catch {}
+  const W = 1080;
+  const cv = document.createElement("canvas"); cv.width = W; cv.height = kind === "lucky" ? 1350 : 9000;
+  const ctx = cv.getContext("2d");
+  let H;
+  if (kind === "lucky") {
+    H = 1350; paintBg(ctx, W, H);
+    const c = BY_ID[S.lucky], L = luckyText(S.lucky);
+    text(ctx, "LIGHT THE WAY · 오늘의 행운 카드", W / 2, 80, { font: `600 26px ${FONT_B}`, color: IMGC.gold, align: "center" });
+    const cw = 400, cx = (W - cw) / 2;
+    ctx.save(); ctx.shadowColor = "rgba(0,0,0,.45)"; ctx.shadowBlur = 40; ctx.fillStyle = IMGC.gold; roundRect(ctx, cx - 6, 140 - 6, cw + 12, cw * 527 / 300 + 12, 26); ctx.fill(); ctx.restore();
+    const ch = await drawCard(ctx, S.lucky, false, cx, 140, cw);
+    let y = 140 + ch + 40;
+    y = text(ctx, c.ko, W / 2, y, { font: `700 56px ${FONT_D}`, align: "center" }) + 4;
+    y = text(ctx, L.kw.join(" · "), W / 2, y, { font: `500 28px ${FONT_B}`, color: IMGC.gold, align: "center" }) + 18;
+    y = text(ctx, `“${L.word}”`, W / 2, y, { font: `600 34px ${FONT_D}`, align: "center", maxW: 880, lh: 1.5 });
+    text(ctx, `${today()} · ${siteURL()}`, W / 2, H - 80, { font: `400 20px ${FONT_B}`, color: IMGC.muted, align: "center" });
+  } else {
+    paintBg(ctx, W, cv.height);
+    const t = TOPICS[S.topic];
+    let y = 80;
+    y = text(ctx, "LIGHT THE WAY · 11장 타로", 80, y, { font: `600 24px ${FONT_B}`, color: IMGC.gold }) + 10;
+    y = text(ctx, `${t.name} 리딩`, 80, y, { font: `700 64px ${FONT_D}` }) + 4;
+    y = text(ctx, today(), 80, y, { font: `400 22px ${FONT_B}`, color: IMGC.muted }) + 24;
+    const q = $("#q").value.trim();
+    if (q) y = text(ctx, `질문 · ${q}`, 80, y, { font: `500 26px ${FONT_B}` }) + 14;
+    if (S.flow) y = text(ctx, S.flow, 80, y, { font: `600 26px ${FONT_B}`, color: IMGC.gold }) + 30;
+    if (S.topic === "choice") {
+      y = text(ctx, S.compare, 80, y, { font: `400 25px ${FONT_B}` }) + 34;
+      for (const k of ["A", "B"]) {
+        y = await drawSpread(ctx, S.spreads[k], `${k} · ${S.labels[k]}`, y, W);
+        y = drawSummary(ctx, S.summary[k] || [], y) + 20;
+      }
+    } else {
+      y = await drawSpread(ctx, S.spreads.main, "", y, W);
+      y = drawSummary(ctx, S.summary.main || [], y);
+    }
+    if (S.lucky) {
+      const c = BY_ID[S.lucky];
+      ctx.strokeStyle = IMGC.line; ctx.beginPath(); ctx.moveTo(80, y); ctx.lineTo(W - 80, y); ctx.stroke(); y += 30;
+      const ch = await drawCard(ctx, S.lucky, false, 80, y, 150);
+      text(ctx, "오늘의 행운 카드", 260, y + 10, { font: `600 24px ${FONT_B}`, color: IMGC.gold });
+      text(ctx, c.ko, 260, y + 48, { font: `700 40px ${FONT_D}` });
+      text(ctx, `“${c.up.word}”`, 260, y + 110, { font: `600 26px ${FONT_D}`, maxW: 740, lh: 1.5 });
+      y += ch + 30;
+    }
+    y = text(ctx, siteURL(), W / 2, y + 20, { font: `400 20px ${FONT_B}`, color: IMGC.muted, align: "center" }) + 70;
+    H = Math.ceil(y);
+    const out = document.createElement("canvas"); out.width = W; out.height = H;
+    const o = out.getContext("2d"); paintBg(o, W, H); o.drawImage(cv, 0, 0, W, H - 30, 0, 0, W, H - 30);
+    const ctx2 = o; ctx2.strokeStyle = IMGC.line; ctx2.lineWidth = 2; ctx2.strokeRect(24, 24, W - 48, H - 48);
+    return openSheet(out, `light-the-way-${S.topic}-${today().replace(/\./g, "")}.png`, "결과 이미지가 만들어졌어요");
+  }
+  return openSheet(cv, `light-the-way-lucky-${today().replace(/\./g, "")}.png`, "행운의 카드 이미지가 만들어졌어요");
+}
+let sheetFile = null, sheetURL = null;
+function openSheet(canvas, name, title) {
+  canvas.toBlob(blob => {
+    if (sheetURL) URL.revokeObjectURL(sheetURL);
+    sheetURL = URL.createObjectURL(blob);
+    sheetFile = new File([blob], name, { type: "image/png" });
+    $("#sheet-title").textContent = title;
+    $("#sheet-img").src = sheetURL;
+    $("#sheet").hidden = false;
+  }, "image/png");
+}
+$("#sheet-close").addEventListener("click", () => { $("#sheet").hidden = true; });
+$("#sheet").addEventListener("click", e => { if (e.target.id === "sheet") $("#sheet").hidden = true; });
+$("#sheet-save").addEventListener("click", async () => {
+  if (!sheetFile) return;
+  try {
+    if (navigator.canShare && navigator.canShare({ files: [sheetFile] })) { await navigator.share({ files: [sheetFile], title: "Light the Way" }); return; }
+  } catch (e) { if (e && e.name === "AbortError") return; }
+  const a = document.createElement("a"); a.href = sheetURL; a.download = sheetFile.name; document.body.appendChild(a); a.click(); a.remove();
+  $("#sheet-tip").textContent = "저장이 시작되지 않으면 이미지를 길게 누르거나 오른쪽 클릭해서 저장해 주세요.";
+});
+$("#save-img").addEventListener("click", () => makeImage("result"));
+
+/* ---------- 공유 ---------- */
+$("#share").addEventListener("click", async () => {
+  const t = TOPICS[S.topic];
+  const key = S.topic === "choice" ? S.spreads.A[0] : S.spreads.main[0];
+  const words = S.topic === "choice" ? "" : `\n새길 말: “${txt(S.spreads.main[10], "word")}”`;
+  const body = `[Light the Way 타로] ${t.name} 리딩\n내가 고른 열쇠 카드: ${nameOf(key)}${words}${S.lucky ? `\n오늘의 행운 카드: ${BY_ID[S.lucky].ko}` : ""}\n\n나도 타로 보러 가기`;
+  const data = { title: "Light the Way · 11장 타로", text: body, url: siteURL() };
+  try { if (navigator.share) { await navigator.share(data); return; } } catch (e) { if (e && e.name === "AbortError") return; }
+  try { await navigator.clipboard.writeText(`${body}\n${siteURL()}`); $("#toast").textContent = "공유할 글과 사이트 주소를 복사했어요. 카카오톡이나 메시지에 붙여 넣어 주세요."; }
+  catch { $("#toast").textContent = `이 주소를 복사해 공유해 주세요: ${siteURL()}`; }
+});
 
 /* ---------- 결제 (카카오 로그인 + 카카오페이) ----------
    /api 가 있는 곳(Cloudflare Pages)에서만 켜집니다. GitHub Pages 같은 정적 호스팅에서는 무료로 동작합니다. */
@@ -845,8 +1106,8 @@ function renderAccount() {
   el.hidden = !PAY.on;
   if (!PAY.on) return;
   el.innerHTML = PAY.user
-    ? `<span><b>${esc(PAY.user.nickname)}</b>님, 반가워요.${PAY.test ? " (테스트 결제 모드)" : ""}</span><a class="btn small" href="/api/auth/logout">로그아웃</a>`
-    : `<span>카카오 계정으로 가입하고, 볼 때마다 결제해요.${PAY.test ? " (테스트 결제 모드)" : ""}</span><a class="btn kakao small" href="/api/auth/login">카카오로 시작하기</a>`;
+    ? `<span><b>${esc(PAY.user.nickname)}</b>님, 반가워요.${PAY.demo ? " (체험 모드)" : PAY.test ? " (테스트 결제 모드)" : ""}</span><a class="btn small" href="/api/auth/logout" data-act="logout">로그아웃</a>`
+    : `<span>카카오 계정으로 가입하고, 볼 때마다 결제해요.${PAY.demo ? " (체험 모드)" : PAY.test ? " (테스트 결제 모드)" : ""}</span><a class="btn kakao small" href="/api/auth/login" data-act="login">카카오로 시작하기</a>`;
 }
 async function api(path, opts) {
   const r = await fetch(path, { credentials: "same-origin", ...opts, headers: { "Content-Type": "application/json", ...(opts && opts.headers) } });
@@ -854,6 +1115,12 @@ async function api(path, opts) {
   return { ok: r.ok, status: r.status, data };
 }
 async function payStart() {
+  if (PAY.demo) {
+    if (!PAY.user) { PAY.user = { nickname: "체험 회원" }; renderAccount(); selectTopic(S.topic); notice("카카오 로그인을 체험으로 건너뛰었어요. 실제 사이트에서는 카카오 로그인 화면이 열려요."); return; }
+    $("#pd-title").textContent = `${TOPICS[S.topic].name} · ${won(PAY.prices[S.topic].amount)}`;
+    $("#paydemo").hidden = false;
+    return;
+  }
   if (!PAY.user) { store.set("tarot-form", formState()); location.href = "/api/auth/login"; return; }
   $("#go").disabled = true;
   const f = formState();
@@ -864,7 +1131,15 @@ async function payStart() {
   const mobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
   location.href = (mobile && r.data.mobile) || r.data.pc;
 }
+$("#pd-cancel").addEventListener("click", () => { $("#paydemo").hidden = true; notice("결제를 취소했어요. 원할 때 다시 시도해 주세요."); });
+$("#pd-ok").addEventListener("click", () => {
+  $("#paydemo").hidden = true;
+  S.order = "demo"; S.orderTopic = S.topic;
+  notice(`${won(PAY.prices[S.topic].amount)} 결제가 완료됐어요(체험). 이제 카드를 뽑아 주세요.`);
+  startDraw();
+});
 async function saveSpreads() {
+  if (PAY.demo) return;
   const r = await api(`/api/order/${S.order}`, { method: "POST", body: JSON.stringify({ spreads: S.spreads }) });
   if (r.status === 409 && r.data && r.data.spreads) S.spreads = r.data.spreads;
 }
@@ -876,6 +1151,7 @@ async function openOrder(id) {
   fillForm(o);
   if (o.labels) S.labels = o.labels;
   S.order = o.id; S.orderTopic = o.topic;
+  S.lucky = o.lucky || null;
   if (o.status === "used" && o.spreads) {
     notice(`${TOPICS[o.topic].name} 결제 내역의 풀이를 다시 열었어요. 이 주소를 저장해 두면 언제든 다시 볼 수 있어요.`);
     S.spreads = o.spreads;
@@ -887,8 +1163,19 @@ async function openOrder(id) {
     notice("아직 결제가 끝나지 않은 주문이에요.");
   }
 }
+$("#account").addEventListener("click", e => {
+  const a = e.target.closest("[data-act]"); if (!a || !PAY.demo) return;
+  e.preventDefault();
+  PAY.user = a.dataset.act === "login" ? { nickname: "체험 회원" } : null;
+  renderAccount(); if (S.topic) selectTopic(S.topic);
+});
 async function initPay() {
   const params = new URLSearchParams(location.search);
+  if (window.TAROT_DEMO || location.hash === "#demo") {
+    Object.assign(PAY, { on: true, demo: true, test: false, prices: { love: { amount: 3900 }, reunion: { amount: 3900 }, career: { amount: 2900 }, choice: { amount: 1800 } } });
+    renderTopics(); renderAccount();
+    return;
+  }
   if (/^https?:$/.test(location.protocol)) {
     try {
       const r = await api("/api/me");
