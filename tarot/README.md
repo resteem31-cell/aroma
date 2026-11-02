@@ -22,3 +22,6 @@
 
 ## 카드 그림
 라이더-웨이트 타로(Pamela Colman Smith 그림, 1909년 출간) 스캔본으로, 미국 기준 퍼블릭 도메인입니다. 판매용으로 쓸 때는 판매 국가의 저작권 기준을 한 번 확인하세요.
+
+## 유료 결제 (카카오 로그인 + 카카오페이)
+Cloudflare Pages(루트 디렉터리 `tarot`)에 올리면 `functions/api/`가 결제 서버로 동작하고, 주제를 고를 때마다 결제해야 풀이가 열립니다. GitHub Pages에는 서버가 없어 무료로 동작합니다. 설정 방법은 [SETUP-PAYMENT.md](SETUP-PAYMENT.md).
