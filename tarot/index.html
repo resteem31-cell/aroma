@@ -231,6 +231,9 @@ section { display: grid; gap: 20px; scroll-margin-top: 16px; }
 .reading .why { font-size: 14px; color: var(--muted); margin-top: -6px; }
 .reading .verdict { font-family: var(--display); font-size: 19px; font-weight: 700; line-height: 1.5; color: var(--ink); }
 .reading .tag { display: inline-block; font-size: 12px; font-weight: 700; letter-spacing: .04em; padding: 0 8px; margin-right: 8px; border-radius: 999px; background: var(--accent-soft); color: var(--accent); vertical-align: 2px; }
+.reading .alt { margin: 12px 0 0; padding: 10px 12px; border-radius: 10px; background: color-mix(in srgb, var(--ink, currentColor) 5%, transparent); }
+.reading .alt b { display: block; font-size: 12px; opacity: .7; margin-bottom: 4px; }
+.reading .alt p { margin: 0; }
 .reading .hit { padding-left: 12px; border-left: 3px solid var(--bad); }
 .reading .hit .tag { background: color-mix(in srgb, var(--bad) 14%, transparent); color: var(--bad); }
 .reading .do { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
@@ -629,7 +632,14 @@ const side = d => (d.rev ? BY_ID[d.id].rev : BY_ID[d.id].up) || {};
 const txt = (d, f) => side(d)[f] || "";
 const ctxOf = (d, k) => side(d)[k] || { v: "", fact: "", hit: "", do: [] };
 
-function cardBlock(d, i, pos, isKey) {
+/* 연애·재회: 같은 카드를 다른 각도에서 한 번 더 봅니다 (결론 + 지적). */
+const ALT = {
+  love: ["future", "이대로 두면"],
+  partner: ["love", "관계에서 드러나는 모습"],
+  self: ["love", "관계에 미치는 영향"],
+  future: ["self", "그때 당신 마음"]
+};
+function cardBlock(d, i, pos, isKey, group) {
   const c = BY_ID[d.id], s = suitOf(d.id), n = numOf(d.id);
   const o = ctxOf(d, pos[4]);
   const adv = pos[5] === "adv";
@@ -637,6 +647,8 @@ function cardBlock(d, i, pos, isKey) {
   const doList = `<div class="do"><b>${adv ? "지금 할 일" : "이렇게 하세요"}</b><ol>${(o.do || []).map(x => `<li>${esc(x)}</li>`).join("")}</ol></div>`;
   const fact = `<p><span class="tag">현실</span>${esc(o.fact)}</p>`;
   const hit = `<p class="hit"><span class="tag">지적</span>${esc(o.hit)}</p>`;
+  const alt = group === "lv" && ALT[pos[4]] ? ctxOf(d, ALT[pos[4]][0]) : null;
+  const altHTML = alt && alt.v ? `<div class="alt"><b>${ALT[pos[4]][1]}</b><p><strong>${esc(alt.v)}</strong> ${esc(alt.hit)}</p></div>` : "";
   return `
     <article class="reading">
       <div class="mini">${cardImg(d)}</div>
@@ -647,6 +659,7 @@ function cardBlock(d, i, pos, isKey) {
         <div class="chips">${kwOf(d).map(k => `<span class="chip${d.rev ? " rev" : ""}">${esc(k)}</span>`).join("")}</div>
         <p class="verdict">${esc(o.v)}</p>
         ${adv ? doList + fact + hit : fact + hit + doList}
+        ${altHTML}
         <p class="basis">카드 근거 · ${basis}</p>
       </div>
     </article>`;
@@ -729,7 +742,7 @@ function partHTML(t, ds, summ) {
     const idx = t.pos.map((p, i) => p[0] === k ? i : -1).filter(i => i >= 0);
     if (!idx.length) return;
     html += `<div class="part"><div class="part-h"><span>${String(si + 1).padStart(2, "0")}</span><h3>${title}</h3></div>`;
-    idx.forEach(i => { html += cardBlock(ds[i], i, t.pos[i], i === 0); });
+    idx.forEach(i => { html += cardBlock(ds[i], i, t.pos[i], i === 0, group); });
     if (k === "word") {
       const d = ds[idx[0]];
       html += `<div class="motto"><div class="lab">마음에 새길 말</div><blockquote>${esc(txt(d, "word"))}</blockquote>
